@@ -1,0 +1,86 @@
+├──/client
+│   └── /src
+│       ├── /components
+│       │   ├── /customs
+│       │   │   ├── Button.css →         custom button için css.
+│       │   │   ├── Button.jsx →         custom button.
+│       │   │   └── Quit.jsx →           Home a geri dönmek için Game.jsx de sol üstte görünen buton.
+│       │   ├── Dev.jsx →                shifte bastığımda açılan LeaderBoard için yaptığım Tab componentinde test için geçici olarak kullandığım component.
+│       │   ├── Game.jsx →               asıl oyun canvasının olduğu component.
+│       │   ├── Home.jsx →               oyuncuların nick girip servera bağlandığı component.
+│       │   ├── LeaderBoard.jsx →        şuanda devre dışı olan leaderboard.
+│       │   ├── Map.jsx →                Game componentinin içinde canvasın sağ altında görünen map canvası.
+│       │   ├── Settings.jsx →           Home componentindeyken escye basarak açılan ayarlar uisi.
+│       │   └── Tab.jsx →                diğer verileri göstermesi için yaptığım ui.
+│       ├── /game
+│       │   ├── /core
+│       │   │   ├── client.js →          react Game componentinden alınan verileri js fonskiyonlarına bağlar ve çalıştırır.
+│       │   │   ├── Tick.js →            ana render loopu.
+│       │   │   ├── Timers.js →          ping ve Inputs fonksiyonlarını barındırır.
+│       │   │   └── User.js →            kullanıcının inputlarını tutan class.
+│       │   ├──/entities
+│       │   │   ├── Bullet.js →          client için hafif bullet classı.
+│       │   │   └── Player.js →          client için hafif player classı.
+│       │   ├──/input
+│       │   │   └── listeners.js →       domda key press mouse move gibi inputları alır.
+│       │   ├──/managers
+│       │   │   ├── EntitiesManager.js → sunucuya bağlanıldığında oluşturulan entitypoolu oluşturur.
+│       │   │   └── SnapshotManager.js → şimdilik boş
+│       │   ├──/net
+│       │   │   └── decoder.js →         serverdan gelen bufferı işler.
+│       │   ├──/render
+│       │   │   ├── drawBody.js →        görüş alanındaki oyuncuların karakterlerini çizer. (basit bir daire)
+│       │   │   ├── drawBullet.js →      görüş alanındaki mermileri çizer. (basit bir daire)
+│       │   │   ├── drawFloor.js →       zemini çizer. (ekranın başından sonuna düz çizgiler. kareli defter gibi görünüyor.)
+│       │   │   ├── drawGame.js →        bütün draw fonksiyonlarının çalıştırıldığı yer.
+│       │   │   ├── drawHealth.js →      görüş alanındaki oyuncuların karakterlerinin altında canlarını gösteren bar çizer.
+│       │   │   ├── drawMap.js →         oyuncunun karakterinin server dünyasındaki yerini gösterir. (oyuncu 1920x925 lik bir alanı görür ama map bütün 4000x4000 lik mapteki oyuncunun karakterini görüş alanıyla birlikte gösterir.)
+│       │   │   ├── drawMuzzle.js →      şu anda devre dışı.
+│       │   │   └── drawNick.js →        görüş alanındaki oyuncuların karakterlerinin üstünde oyuna girerken oyuncuların seçtiği nicki çizer.
+│       │   ├──/utils
+│       │   │   ├── Check.js →           io bağlantısı kurulduğunda direkt rendera başlamadan önce hem tek seferlik login verisinin hem de en az 1 game tick olduktan sonra render işleminin başlatılması için bir ready classı.
+│       │   │   ├── Lerp.js →            basit linear interpolation fonksiyonu.
+│       │   │   └── LinkedList.js →      interpolation yapmak için 2 elemanlı basit linked list.
+│       ├──/shared
+│       │   └── BufferShema.js →         hem backendin hem frontendin buffer verilerini işlemek için kullandığı schema.
+│       ├── App.jsx   
+│       ├── index.css   
+│       └── index.js 
+│
+├──/server
+│   ├── /API
+│   │   └── Routes.js →                  express serverın routeları. şu anda devre dışı.
+│   ├── /db
+│   │   └── User.js →                    kullanıcıların girdiği email+şifre ile dbden username çekiyordu. en son çalışıyordu ama şuan devre dışı.
+│   └── /game
+│   │   ├── /core
+│   │   │   ├── Game.js →                oyun için hazırlıkları yapar. managerları çağırır sonra ana oyun loopunu başlatır.
+│   │   │   └── Tick.js →                ana oyun loopu. her tick sırasıyla moveBullets, movePlayers, fire, damage, updateAOI, SnapshotManager.send fonksiyonlarını çalıştırır.
+│   │   ├── /entities
+│   │   │   ├── Bullet.js →              bullet classı.
+│   │   │   └── Player.js →              player classı.
+│   │   ├── /managers
+│   │   │   ├── EntitiesManager.js →     server başladığında maximum gerekecek miktarda entitiy instanceı oluşturur.        
+│   │   │   └── InputManager.js →        clientlerden gelen input verisini işler.      
+│   │   ├── /mechanics
+│   │   │   ├── fire.js →                oyuncunu cooldownda değilse mermi instanceı aquaire eder ve oyuncunun o anki mouse konumuna hedeflenen mermiyi ateşler.
+│   │   │   ├── moveBullets.js →         bütün mermilerin konumlarını günceller.
+│   │   │   ├── movePlayers.js →         bütün oyuncuların konumlarını günceller.
+│   │   │   ├── respawn.js →             oyuncular öldüğünde haritada rastgele bir konumda canlandırır (sadece x ve y ye rastgele bir sayı atar map sınırları içerisinde)
+│   │   ├── /net                
+│   │   │   ├── byteCalculater.js →      encoder için bufferların boyutunu hesaplar.
+│   │   │   ├── encoder.js →             clientlere yolanacak delta/full snapshotu buffera çevirir.
+│   │   │   ├── positioner.js →          hangi cliente hangi clientlerin verilerinin gitmesi gerektiğine karar verir.
+│   │   │   ├── sender.js →              her cliente kendisine özel oluşturulmuş bufferını yollar.
+│   │   │   └── SnapshotManager.js →     şu anda clientlere oyundaki bütün veriyi sırasıyla updateAOI, positioner, byteCalculater, encoder sender dan geçirir.
+│   │   └── /utils
+│   │       ├── AOI.js →                 bir entitiynin (mermi/karakter) kullanıcının karakterinin görüş alanında olup olmadığını kontrol eder.
+│   │       ├── collisions.js →          çarpışma olup olmadığını kontrol eder.
+│   │       ├── damage.js →              mermi ile oyuncu çarpışırsa oyuncunun canı azalır. eğer mermi oyuncuyu öldürürse merminin sahibine kill, oyuncuya da dead yazar.
+│   │       ├── Dirty.js →               mechanicsdeki kodların yaptığı değişiklikleri tutar.
+│   │       ├── Logger.js →              birisi oyuna joinlendiğinde yada leavelediğinde bunun server consoleuna yazar.
+│   │       ├── markDirty.js →           mechanicsdeki kodların yaptığı değişiklikleri yakalar ve Dirty mapine ekler.
+│   │       ├── safeExecute.js →         mechanicsdeki bütün kodların status verisini tutar. eğer herhangi birisi çökerse o hariç diğerlerini çalıştırmaya devam eder.
+│   │       └── updateAOI.js →           bir entitiy (mermi/karakter) kullanıcının karakterinin görüş alanında ise bunu kullanıcının görüş alanındakilerin bulunduğu mape ekler.
+│   └── server.js →                      routes.js ile express server ve io için bağlantıların kurar.
+└── Game_settings.json                   oyunun ayarlarını içeren dosya. mermi ömrü, hızı, boyutu, hasarı, oyuncunun maximum canı, hızı, boyutu, atış hızı, haritanın boyutu verilerini içerir.

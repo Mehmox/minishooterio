@@ -1,0 +1,15 @@
+[2] verisi değişen entity idsi
+[2] verisi değişen entitynin değişen veri sayısı
+
+loop{
+    [2] değişen verinin idsi
+    [
+        [?] yeni veri
+    ] or [
+        [2] görüş alanına eklene/çıkarılan toplam entity sayısı 
+        loop{
+            [2] görüş alanındaki entity idsi
+            [1] entitynin işlem türü
+        }
+    ]
+}

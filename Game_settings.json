@@ -1,0 +1,41 @@
+{
+    "width": 4000,
+    "height": 4000,
+    "player": {
+        "stats": {
+            "health": 4,
+            "size": 25,
+            "speed": 4
+        },
+        "pov": {
+            "width": 1920,
+            "height": 925
+        },
+        "combat": {
+            "isShooting": false,
+            "fireRate": 3,
+            "size": 6,
+            "AMMO_CLIENT_POS": null,
+            "AMMO_SERVER_POS": null,
+            "cooldown": 0
+        }
+    },
+    "new": {
+        "map": {
+            "width": 4000,
+            "height": 4000
+        },
+        "player": {
+            "health": 4,
+            "speed": 5,
+            "size": 30,
+            "fireRate": 3
+        },
+        "bullet": {
+            "lifespan": 6,
+            "speed": 5,
+            "size": 12,
+            "damage": 1
+        }
+    }
+}
