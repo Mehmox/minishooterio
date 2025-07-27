@@ -43,7 +43,7 @@
 }
 /* hover effect on button width */
 .Btn:hover {
-  background-color: black;
+  background-color: rgb(75 85 99);
   width: 125px;
   border-radius: 40px;
   transition-duration: 0.3s;

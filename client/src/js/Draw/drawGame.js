@@ -1,21 +1,25 @@
-//drawGame.js
-
+//client/src/js/Draw/drawGame.js
+import drawFloor from "./drawFloor.js";
 import drawBullet from "./drawBullet.js";
 import drawBodys from "./drawBody.js";
 
-export default function drawGame(ctx, canvas, player, user) {
+function lerp(start, end, t) {
+    return start + (end - start) * t;
+}
+
+export default function drawGame(ctx, player, user, t) {
 
     ctx.clearRect(0, 0, user.pov.width, user.pov.height);
-
-    canvas.style.backgroundPosition = `-${player.x}px -${player.y}px`;
 
     const origin = {
         x: player.x - user.pov.width / 2,
         y: player.y - user.pov.height / 2
     }
 
-    drawBullet(ctx, origin, player.bulletInfo, user);
+    drawFloor("Game", ctx, user.pov, player, t);
 
-    drawBodys(ctx, origin, player.enemyInfo, player.health, user);
+    drawBullet(ctx, origin, player.bulletInfo, user, t);
+
+    drawBodys(ctx, origin, player.enemyInfo, player.health, user, t);
 
 }

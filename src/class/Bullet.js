@@ -1,5 +1,4 @@
-//Bullet.js
-
+//src/class/Bullet.js
 const crypto = require("crypto");
 
 module.exports = class Bullet {

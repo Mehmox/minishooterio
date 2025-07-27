@@ -1,5 +1,6 @@
+//client/src/components/LeaderBoard.jsx
 export default function LeaderBoard({ ref, leaderboard }) {
-    // console.log(leaderboard)
+
     return <div ref={ref} className="flex flex-col justify-between bg-blue-600">
 
         <ul className="max-w-52">

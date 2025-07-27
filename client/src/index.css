@@ -18,11 +18,7 @@ canvas {
     background-color: white;
 }
 
-#root div {
-    width: 100px;
-    height: 100px;
-}
 
-#score {
-    background: rgb(80, 80, 80);
+.inputs {
+    @apply w-input h-16 pb-3 pl-5 text-5xl rounded-[16px]
 }

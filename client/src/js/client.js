@@ -1,19 +1,15 @@
-//client.js
-
+//client/src/js/client.js
 import PrintGame from "./Draw/drawGame.js";
 import PrintMap from "./Draw/drawMap.js";
 import Listeners from "./listeners.js";
 import Check from './class/Check.js';
 import decoder from "./decoder.js"
-// import Ses from "./test.js";
 
 const Start = new Check();
 // const fireSound = new Audio("/assets/sounds/rifle2.mp3");
 // fireSound.volume = 0.05;
 
-// Ses();
-
-
+let SnapshotDelta, lastSnapshotTime;
 let player = {}
 const user = {
     events: {
@@ -35,44 +31,28 @@ const user = {
 
 export default function client(socket, mapDiv, scoreDiv, map, canvas, score, ping, byte, setLeaderBoard) {
 
-    canvas.style.backgroundRepeat = "no-repeat";
-    map.style.backgroundRepeat = "no-repeat";
-
     const ctxg = canvas.getContext("2d");
     const ctxm = map.getContext("2d");
 
 
     const movement = user.events.movement;
-    const combat = user.events.combat;
-    let direction = ""
+    let direction = "";
 
     function Update() {
 
-        direction = ""
+        direction = "";
 
         if (movement.w) direction += "Up";
         if (movement.d) direction += "Right";
         if (movement.s) direction += "Down";
         if (movement.a) direction += "Left";
 
-        const now = performance.now()
+        const now = performance.now();
+        const t = (now - lastSnapshotTime) / SnapshotDelta;
 
-        if (now >= combat.ShootCoolDown && combat.isShooting) {
+        PrintGame(ctxg, player, user, t);
 
-            // fireSound.currentTime = 0;
-            // fireSound.play();
-
-            combat.ShootCoolDown = now + 1000 / combat.fireRate;
-
-        }
-
-        if (player) {
-
-            PrintGame(ctxg, canvas, player, user);
-
-            PrintMap(ctxm, map, player, user);
-
-        }
+        PrintMap(ctxm, map, player, user);
 
         requestAnimationFrame(Update);
 
@@ -100,8 +80,9 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
 
     Start.set(Update);
 
-    socket.on("login", ({ id, settings, ENV, nick }) => {
+    socket.on("login", ({ delta, id, settings, nick }) => {
 
+        SnapshotDelta = delta;
         user.id = id;
         user.nick = nick;
         user.bulletsize = settings.player.combat.size;
@@ -122,8 +103,6 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
 
         canvas.width = user.pov.width;
         canvas.height = user.pov.height;
-        canvas.style.backgroundImage = `url("/assets/images/Map${ENV !== "production" ? 1 : settings.mapId}.png")`;
-        canvas.style.backgroundSize = `${settings.width + user.pov.width}px ${settings.height + user.pov.height}px`;
 
 
         score.style.width = user.pov.width / 2 + "px";
@@ -138,6 +117,8 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
         byte.innerHTML = `Packets: ${game_data.byteLength} bytes`
 
         player = decoder(game_data);
+
+        lastSnapshotTime = performance.now();
 
         setLeaderBoard(player.leaderBoard);
 

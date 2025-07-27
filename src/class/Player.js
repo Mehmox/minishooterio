@@ -1,5 +1,4 @@
-//Players.js
-
+//src/class/Players.js
 const crypto = require("crypto");
 
 const Bullet = require("./Bullet");

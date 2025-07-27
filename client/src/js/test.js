@@ -1,3 +1,4 @@
+//client/src/js/test.js
 export default async function Ses() {
     //   "/assets/sounds/rifle2.mp3"
 

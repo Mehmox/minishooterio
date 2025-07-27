@@ -1,5 +1,4 @@
-//Update.js
-
+//src/Update/Update.js
 const eff = require("../class/Efficiency");
 
 const updateBullets = require("./positions/updateBullets");
@@ -12,11 +11,12 @@ const send = require("./Send/send");
 
 const Efficiency = new eff({ log_Mode: "linear" });
 
-module.exports = function GameLoop(Tick, io, Game) {
+module.exports = function GameLoop(Tick, snapshotTick, io, Game) {
 
     const ms = 1000 / Tick;
     let GameTick = 0;
     let Last_Update_Time = performance.now();
+    const snapshot = Tick / snapshotTick;
 
     function Update() {
 
@@ -62,7 +62,7 @@ module.exports = function GameLoop(Tick, io, Game) {
             //update leaderBoard
             Game.leaderboard = Object.values(Game.KDA).sort((a, b) => (b.KDA.kill + b.KDA.assist / 2) - (a.KDA.kill + a.KDA.assist / 2));
             //updated game data send to all clients
-            send(io, Game);
+            if (GameTick % snapshot === 0) send(io, Game);
 
             Last_Update_Time = now;
 

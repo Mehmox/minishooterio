@@ -1,5 +1,4 @@
-//bullets.js
-
+//src/Update/Pov/bullets.js
 const is_In_Pov = require("./inPov");
 
 module.exports = function SetBullets(player, bullets) {

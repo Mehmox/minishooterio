@@ -1,5 +1,4 @@
-//Check.js
-
+//client/src/js/Check.js
 export default class Check {
 
     constructor(func, promiseNumber = 2) {

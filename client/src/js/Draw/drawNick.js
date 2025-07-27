@@ -1,5 +1,4 @@
-//drawNick.js
-
+//client/src/js/Draw/drawNick.js
 export default function drawNick(ctx, x, y, size, nick) {
 
     ctx.font = "41px Arial";

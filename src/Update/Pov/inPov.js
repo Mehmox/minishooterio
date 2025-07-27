@@ -1,5 +1,4 @@
-//inPov.js
-
+//src/Update/Pov/inPov.js
 module.exports = function is_In_Pov(player, object) {
 
     if (object.position.x - object.stats.size <= player.position.x + player.pov.width / 2 &&

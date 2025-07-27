@@ -1,5 +1,4 @@
-//decoder.js
-
+//client/src/js/decoder.js
 const nicklength = 9;
 const Buffer_size_info = 1 + 1 + 1//enemy number, bullet number, leaderboard number
 const player_bytes = 4 + 4 + 1;//x, y, heath

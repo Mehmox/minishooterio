@@ -1,6 +1,6 @@
-//App.jsx
+//client/src/App.jsx
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./components/Home.jsx";
 import Game from "./components/Game.jsx";
@@ -10,17 +10,19 @@ export default function App() {
 
   const [nick, setNick] = useState();
 
-  return <>
-    <Router>
+  return <Router>
 
-      <Routes>
+    <Routes>
 
-        <Route path="/" element={<Home setNick={setNick} />}></Route>
+      <Route path="/" element={<Navigate to="/login" replace />} navigator></Route>
 
-        <Route path="/Play" element={<Game nick={nick} />}></Route>
+      <Route path="/register" element={<Home setNick={setNick} type="register" />}></Route>
 
-      </Routes>
+      <Route path="/login" element={<Home setNick={setNick} type="login" />}></Route>
 
-    </Router>
-  </ >;
+      <Route path="/game" element={<Game nick={nick} />}></Route>
+
+    </Routes>
+
+  </Router>;
 }

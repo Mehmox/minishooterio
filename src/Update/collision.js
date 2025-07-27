@@ -1,5 +1,4 @@
-//collision.js
-
+//src/Update/collision.js
 module.exports = function is_collision(Player, Bullet) {
 
     if (Player.id !== Bullet.owner) {

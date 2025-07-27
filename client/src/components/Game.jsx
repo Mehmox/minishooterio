@@ -1,4 +1,4 @@
-//App.jsx
+//client/src/components/Game.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
@@ -9,7 +9,8 @@ import client from "../js/client.js";
 
 const ENV = process.env.REACT_APP_ENV;
 
-export default function App({ nick }) {
+export default function Game({ nick }) {
+
     const navigate = useNavigate();
 
     const socket = useRef()
@@ -24,19 +25,25 @@ export default function App({ nick }) {
     const byteRef = useRef(null);
 
     useEffect(() => {
+
         socket.current = io(ENV === "development" ? "http://localhost:3001" : undefined, {
             query: { nick }
         })
+
+        return () => socket.current.disconnect();
+
     }, []);
 
     useEffect(() => client(socket.current, mapDivRef.current, scoreDivRef.current, mapCanvasRef.current, gameCanvasRef.current, scoreRef.current, pingRef.current, byteRef.current, setLeaderBoard), []);
 
     return <section className="h-screen flex flex-col justify-between">
-        <section className="w-28 h-16 absolute left-0 top-0"><Quit onClick={() => navigate("/")}>Quit</Quit></section>
+
+        <section className="w-28 h-16 absolute left-0 top-0"><Quit onClick={() => navigate("/login")}>Quit</Quit></section>
+
         <main className="flex items-center bg-green-500">
 
             <section className="flex bg-gray-600">
-                
+
                 <div ref={mapDivRef} className="flex flex-col justify-end items-end">
 
                     <section className="flex my-0 p-0">
@@ -59,6 +66,7 @@ export default function App({ nick }) {
             </section>
 
         </main>
+
     </section>;
 
 }

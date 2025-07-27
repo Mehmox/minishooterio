@@ -1,5 +1,4 @@
-//drawHeatlh.js
-
+//client/src/js/Draw/drawHeatlh.js
 export default function drawHealth(ctx, x, y, size, health, color) {
 
     ctx.fillStyle = color;

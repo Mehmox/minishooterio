@@ -1,8 +1,10 @@
-//drawBody.js
+//client/src/js/Draw/drawBody.js
 import drawHealth from "./drawHealth.js";
 import drawNick from "./drawNick.js";
 
 export default function drawBody(ctx, origin, enemeys, health, user) {
+
+    ctx.lineWidth = 1;
 
     enemeys.forEach(enemy => {
 

@@ -1,4 +1,4 @@
-//Efficiency.js
+//src/class/Efficiency.js
 
 module.exports = class name {
 

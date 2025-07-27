@@ -1,11 +1,14 @@
-//drawMap.js
-
+//client/src/js/Draw/drawMap.js
+import drawFloor from "./drawFloor";
 export default function drawMap(ctx, map, { x, y }, { size, pov }) {
 
     ctx.fillStyle = "blue";
 
     ctx.clearRect(0, 0, map.width, map.height);
 
+    drawFloor("Map", ctx, map, { x, y });
+
+    ctx.lineWidth = 30;
     //draw client
     ctx.beginPath();
 
@@ -21,7 +24,6 @@ export default function drawMap(ctx, map, { x, y }, { size, pov }) {
         y: y - pov.height / 2
     }
 
-    ctx.lineWidth = 25;
     //draw pov
     ctx.beginPath();
 

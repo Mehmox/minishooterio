@@ -1,5 +1,4 @@
-//drawBullet.js
-
+//client/src/js/Draw/drawBullet.js
 export default function drawBullet(ctx, origin, bullets, user) {
 
     ctx.lineWidth = 1;

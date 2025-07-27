@@ -1,23 +1,26 @@
-//server.js
-
+//src/server.js
 const express = require("express");
-const http = require("http")
+const http = require("http");
 const { Server } = require("socket.io");
+const app = express();
+const server = http.createServer(app);
 
+const Routes = require("./Routes/index")
 const Player = require("./class/Player");
 const GameLoop = require("./Update/Update");
 const Game_settings = require("./Game_settings");
 const path = require("path");
 
-const PORT = process.argv[2] || process.env.PORT ;
+const PORT = process.env.PORT || 3001;
 const ENV = process.env.NODE_ENV;
 const FPS = 128;
-const MAX_NICK_BYTES = 9;
-Game_settings.mapId = Math.floor(Math.random() * 3) + 1;
-
-const app = express();
-const cors = require("cors");
-const server = http.createServer(app);
+const snapshotTick = 32;
+const Game = {
+    players: {},
+    bullets: {},
+    KDA: [],
+    leaderboard: [],
+}
 
 const io = new Server(server, {
     cors: {
@@ -25,22 +28,13 @@ const io = new Server(server, {
         methods: ['GET', 'POST']
     }
 });
-app.use(express.json());
-app.use(cors());
-
+app.use("/", Routes);
 if (ENV !== "development") {
-
-    console.log("build served");
 
     app.use(express.static(path.join(__dirname, "../build")));
 
-}
+    console.log("build served\n");
 
-const Game = {
-    players: {},
-    bullets: {},
-    KDA: [],
-    leaderboard: [],
 }
 
 // io.use((socket, next) => {
@@ -51,20 +45,14 @@ const Game = {
 
 // });
 
-app.post("/check", (req, res) => {
-
-    const { nick } = req.body;
-
-    res.send(Buffer.byteLength(nick.trim(), "utf8") < MAX_NICK_BYTES);
-
-});
-
 const RATE_LIMIT = 20; // saniyede max 20 mesaj
 const INTERVAL = 1000; // 1 saniye
 
 io.on("connect", (socket) => {
 
-    const { nick } = socket.handshake.query;
+    let { nick } = socket.handshake.query;
+
+    if (nick === "undefined") nick = "";
 
     // socket.use(() => {
     //     socket._rateLimit.count++;
@@ -83,10 +71,10 @@ io.on("connect", (socket) => {
 
     Game.players[user.id] = user;
 
-    console.log(`"${user.userName}"[#${user.id}] joined.`);
+    console.log(`"${user.nick}"[#${user.id}] joined.`);
     console.log(`\n${Object.keys(Game.players).length} player online!`);
 
-    socket.emit("login", { id: socket.id, settings: Game_settings, ENV, nick: user.nick });
+    socket.emit("login", { snapshotms: FPS / snapshotTick, id: socket.id, settings: Game_settings, nick: user.nick });
 
     Game.KDA[user.id] = { KDA: Game.players[user.id].KDA, nick: Game.players[user.id].nick };
 
@@ -119,13 +107,14 @@ io.on("connect", (socket) => {
 
         });
 
-        console.log(`"${user.userName}"[#${user.id}] disconnected.`);
+        console.log(`"${user.nick}"[#${user.id}] disconnected.`);
         console.log(`\n${Object.keys(Game.players).length} player online!`);
 
     });
 
 });
 
-GameLoop(FPS, io, Game);
+
+GameLoop(FPS, snapshotTick, io, Game);
 
 server.listen(PORT, () => console.log(`listening on port: ${PORT}`));
