@@ -1,14 +1,16 @@
 //Players.js
 
+const crypto = require("crypto");
+
 const Bullet = require("./Bullet");
 
 const DIAGONAL_FACTOR = Math.sqrt(2);
 
 module.exports = class Player {
 
-    constructor(self, FPS, ENV, Game_settings, userName) {
+    constructor(FPS, ENV, Game_settings, userName) {
 
-        this.self = self;
+        this.self = crypto.randomBytes(8).toString("base64");
         this.FPS = FPS;
         this.ENV = ENV;
         this.userName = userName;

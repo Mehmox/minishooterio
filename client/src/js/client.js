@@ -33,7 +33,7 @@ const user = {
 
 }
 
-export default function client(socket, mapDiv, scoreDiv, map, canvas, score, ping, byte, setLeaderBoard) {
+export default function client(socket, mapDiv, map, canvas, score, setLeaderBoard) {
 
     canvas.style.backgroundRepeat = "no-repeat";
     map.style.backgroundRepeat = "no-repeat";
@@ -85,19 +85,6 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
         socket.emit("combat", { isShooting: user.events.combat.isShooting, Muzzle_Direction: user.events.combat.Muzzle_Direction });
 
     }, 1000 / 20);
-
-    setInterval(() => {
-        const now = performance.now();
-
-        socket.emit("ping", () => {
-
-            const end = performance.now();
-
-            ping.innerHTML = `Ping: ${((end - now) / 2).toFixed(0)}`;
-
-        });
-
-    }, 400);
 
     Start.set(Update);
 

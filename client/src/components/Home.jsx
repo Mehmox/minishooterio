@@ -14,15 +14,21 @@ export default function App({ setNick }) {
 
         <section className="w-screen h-screen flex flex-col justify-center items-center">
 
-            <input ref={nick} type="text" maxLength="17" placeholder="enter user name"
-                className="w-input h-16 pb-3 text-5xl rounded-[16px] bg-gray-600" />
-            <Button onClick={() => {
+            <form className="w-full h-full flex flex-col justify-center items-center"
+                onSubmit={(event) => {
 
-                setNick(nick.current.value);
+                    event.preventDefault();
 
-                navigate("/Play");
+                    setNick(nick.current.value);
 
-            }}>START</Button>
+                    navigate("/Play");
+
+                }}>
+                <input ref={nick} type="text" maxLength="17" placeholder="enter user name"
+                    className="w-input h-16 pb-3 text-5xl rounded-[16px] bg-gray-600" />
+                <Button type="submit">START</Button>
+            </form>
+            
         </ section>
 
     </section>;

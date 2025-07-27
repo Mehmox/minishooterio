@@ -5,7 +5,7 @@ export default function SetBullet(ctx, origin, selfId, bullets) {
     ctx.lineWidth = 1;
 
     for (const bulletId in bullets) {
-        
+
         const bullet = bullets[bulletId];
 
         const canvasBulletPos = {

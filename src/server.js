@@ -60,7 +60,7 @@ io.on("connect", (socket) => {
     // socket.use(() => {
     //     socket._rateLimit.count++;
     //     if (socket._rateLimit.count > RATE_LIMIT) {
-    //         console.log(`Socket ${socket.id} is reached the rate limited.`);
+    //         console.log(`Socket ${player.self} is reached the rate limited.`);
     //         socket.disconnect();
     //     }
     // });
@@ -70,24 +70,21 @@ io.on("connect", (socket) => {
     //     socket._rateLimit.lastCheck = Date.now();
     // }, INTERVAL);
 
-    console.log(`id: ${socket.id} joined.`);
+    
+    const player = new Player(FPS, ENV, Game_settings, nick);
+    
+    Game.players[player.self] = player;
 
-    Game.players[socket.id] = new Player(socket.id, FPS, ENV, Game_settings, nick);
+    console.log(`id: ${player.self} joined.`);
 
-    Game.leaderboard.push({ KDA: Game.players[socket.id].KDA, nick: Game.players[socket.id].userName, id: Game.players[socket.id].self });
+    Game.leaderboard.push({ KDA: Game.players[player.self].KDA, nick: Game.players[player.self].userName, id: Game.players[player.self].self });
 
-    socket.emit("login", { id: socket.id, game: Game_settings, ENV });
+    socket.emit("login", { id: player.self, game: Game_settings, ENV });
 
-    socket.on("ping", (res) => {
-
-        if (typeof (res) === "function") res();
-
-    });
-
-    socket.on("movement", (direction) => Game.players[socket.id].direction = direction);
+    socket.on("movement", (direction) => Game.players[player.self].direction = direction);
 
 
-    const self = Game.players[socket.id];
+    const self = Game.players[player.self];
 
     socket.on("combat", (combat) => {
 
@@ -102,13 +99,13 @@ io.on("connect", (socket) => {
 
     socket.on("disconnect", () => {
 
-        delete Game.players[socket.id];
+        delete Game.players[player.self];
 
         for (let i = 0; i < Game.leaderboard.length; i++) {
 
             const player = Game.leaderboard[i];
 
-            if (player.id === socket.id) Game.leaderboard.splice(i, 1);
+            if (player.self === player.self) Game.leaderboard.splice(i, 1);
 
         }
 
@@ -116,11 +113,11 @@ io.on("connect", (socket) => {
 
             const bullet = Game.bullets[bulletId];
 
-            if (bullet.owner === socket.id) delete Game.bullets[bulletId];
+            if (bullet.owner === player.self) delete Game.bullets[bulletId];
 
         }
 
-        console.log(`id: ${socket.id} disconnected.`);
+        console.log(`id: ${player.self} disconnected.`);
 
     });
 

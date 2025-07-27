@@ -5,7 +5,7 @@ const crypto = require("crypto");
 module.exports = class Bullet {
 
     constructor(player) {
-        this.id = crypto.randomUUID();
+        this.id = crypto.randomBytes(8).toString("base64");
         this.owner = player.self;
         this.stats = {
             size: 7,

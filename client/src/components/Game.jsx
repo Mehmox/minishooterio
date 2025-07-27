@@ -1,5 +1,6 @@
 //App.jsx
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
 
 import LeaderBoard from "./LeaderBoard.jsx";
@@ -8,17 +9,15 @@ import client from "../js/client.js";
 const ENV = process.env.REACT_APP_ENV;
 
 export default function App({ nick }) {
+    const navigate = useNavigate();
 
     const socket = useRef()
 
     const [leaderboard, setLeaderBoard] = useState([]);
     const mapDivRef = useRef(null);
-    const scoreDivRef = useRef(null);
-    const mapCanvasRef = useRef(null);
     const gameCanvasRef = useRef(null);
+    const mapCanvasRef = useRef(null);
     const scoreRef = useRef(null);
-    const pingRef = useRef(null);
-    const byteRef = useRef(null);
 
     useEffect(() => {
         socket.current = io(ENV === "development" ? "http://localhost:3001" : undefined, {
@@ -26,18 +25,14 @@ export default function App({ nick }) {
         })
     }, []);
 
-    useEffect(() => client(socket.current, mapDivRef.current, scoreDivRef.current, mapCanvasRef.current, gameCanvasRef.current, scoreRef.current, pingRef.current, byteRef.current, setLeaderBoard), []);
+    useEffect(() => client(socket.current, mapDivRef.current, mapCanvasRef.current, gameCanvasRef.current, scoreRef.current, setLeaderBoard), []);
 
-    return <section className="h-screen flex flex-col justify-between">
+    return <section className="h-screen flex flex-col">
+        <section className="bg-red-600"><button onClick={() => navigate("/")}>Back</button></section>
         <main className="flex items-center bg-green-500">
 
             <section className="flex bg-gray-600">
-                <div ref={mapDivRef} className="flex flex-col justify-end items-end">
-
-                    <section className="flex my-0 p-0">
-                        <section ref={pingRef} className="w-[80px]"></section>
-                        <section ref={byteRef} className="mr-7"></section>
-                    </section>
+                <div ref={mapDivRef} className="flex justify-end items-end">
 
                     <canvas id="map" ref={mapCanvasRef} className="w-60 h-60"></canvas>
 
@@ -45,12 +40,7 @@ export default function App({ nick }) {
 
                 <canvas id="game" ref={gameCanvasRef} ></canvas>
 
-                <div ref={scoreDivRef} className="flex justify-end items-end">
-
-                    <LeaderBoard ref={scoreRef} leaderboard={leaderboard} />
-
-                </div>
-
+                <LeaderBoard ref={scoreRef} leaderboard={leaderboard} className="flex max-h-0" />
             </section>
 
         </main>

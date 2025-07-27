@@ -142,7 +142,7 @@ module.exports = class name {
 
                 this.end = performance.now();
 
-                if (this.startEnd % 21 === 0) console.log(`${(this.end - this.start).toFixed(3)}ms passed to finish this tick`);
+                if (this.startEnd % 21 === 0) console.log(`${(this.end - this.start).toFixed(3)}ms!`);
 
             }
 
