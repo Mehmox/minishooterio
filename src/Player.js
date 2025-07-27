@@ -1,60 +1,93 @@
 //players.js
+const Bullet = require("./Bullet");
+
 module.exports = class Player {
-    constructor(id, mapWidth, mapHeight) {
-        this.player = id;
+    constructor(self, Game, ENV) {
+        this.self = self
+        this.ENV = ENV
+        switch (ENV) {
+            case "pro":
+                this.position = {
+                    x: Math.random() * (Game.width - this.size),
+                    y: Math.random() * (Game.height - this.size),
+                }
+                break;
+            case "dev":
+            case "test":
+                this.position = {
+                    x: 1000,
+                    y: 1000,
+                }
+                break;
+        }
         this.size = 20
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
-        this.x = Math.random() * (mapWidth - this.size);
-        this.y = Math.random() * (mapHeight - this.size);
         this.speed = 5;
+        this.pov = {
+            width: Game.pov.width,
+            height: Game.pov.height
+        }
         this.direction = "";
+
+        this.mapWidth = Game.width;
+        this.mapHeight = Game.height;
+
+
+        this.bullets = [];
+        this.fireRate = 1.5;
+        this.cooldown = 0;
+
+        this.enemieInfo = {}
+        this.bulletInfo = {}
+
     }
     Up() {
-        if (this.y - this.speed > 0 + this.size)
-            this.y -= this.speed;
+        if (this.position.y - this.speed > this.size || this.ENV === "dev")
+            this.position.y -= this.speed;
     }
     Down() {
-        if (this.y + this.speed < this.mapHeight - this.size)
-            this.y += this.speed;
+        if (this.position.y + this.speed < this.mapHeight - this.size * 2 || this.ENV === "dev")
+            this.position.y += this.speed;
     }
     Left() {
-        if (this.x - this.speed > 0 + this.size)
-            this.x -= this.speed;
+        if (this.position.x - this.speed > this.size || this.ENV === "dev")
+            this.position.x -= this.speed;
     }
     Right() {
-        if (this.x + this.speed < this.mapWidth - this.size)
-            this.x += this.speed;
+        if (this.position.x + this.speed < this.mapWidth - this.size * 2 || this.ENV === "dev")
+            this.position.x += this.speed;
     }
 
     UpRight() {
-        if (this.y - this.speed > 0 + this.size)
-            this.y -= this.speed / Math.sqrt(2);
-        if (this.x + this.speed < this.mapWidth - this.size)
-            this.x += this.speed / Math.sqrt(2);
+        if (this.position.y - this.speed > this.size || this.ENV === "dev")
+            this.position.y -= this.speed / Math.sqrt(2);
+        if (this.position.x + this.speed < this.mapWidth - this.size * 2 || this.ENV === "dev")
+            this.position.x += this.speed / Math.sqrt(2);
     }
     RightDown() {
-        if (this.x + this.speed < this.mapWidth - this.size)
-            this.x += this.speed / Math.sqrt(2);
-        if (this.y + this.speed < this.mapHeight - this.size)
-            this.y += this.speed / Math.sqrt(2);
+        if (this.position.x + this.speed < this.mapWidth - this.size * 2 || this.ENV === "dev")
+            this.position.x += this.speed / Math.sqrt(2);
+        if (this.position.y + this.speed < this.mapHeight - this.size * 2 || this.ENV === "dev")
+            this.position.y += this.speed / Math.sqrt(2);
     }
 
     DownLeft() {
-        if (this.y + this.speed < this.mapHeight - this.size)
-            this.y += this.speed / Math.sqrt(2);
-        if (this.x - this.speed > 0 + this.size)
-            this.x -= this.speed / Math.sqrt(2);
+        if (this.position.y + this.speed < this.mapHeight - this.size * 2 || this.ENV === "dev")
+            this.position.y += this.speed / Math.sqrt(2);
+        if (this.position.x - this.speed > this.size || this.ENV === "dev")
+            this.position.x -= this.speed / Math.sqrt(2);
     }
 
     UpLeft() {
-        if (this.y - this.speed > 0 + this.size)
-            this.y -= this.speed / Math.sqrt(2);
-        if (this.x - this.speed > 0 + this.size)
-            this.x -= this.speed / Math.sqrt(2);
+        if (this.position.y - this.speed > this.size || this.ENV === "dev")
+            this.position.y -= this.speed / Math.sqrt(2);
+        if (this.position.x - this.speed > this.size || this.ENV === "dev")
+            this.position.x -= this.speed / Math.sqrt(2);
     }
 
-    fire() {
-
+    fire(target) {
+        if (Date.now() >= this.cooldown) {
+            this.cooldown = Date.now() + 1000 / this.fireRate;
+            this.bullets.push(new Bullet(this, target))
+        }
     }
 }

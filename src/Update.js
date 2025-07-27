@@ -1,21 +1,59 @@
 //Update.js
-module.exports = function Update(io, players) {
-    for (const id in players) {
+const is_In_Pov = require("./inPov");
+let counter = 0;
 
-        switch (players[id].direction) {
-            case "up": players[id].Up(); break;
-            case "right": players[id].Right(); break;
-            case "down": players[id].Down(); break;
-            case "left": players[id].Left(); break;
+module.exports = function Update(io, Game, ENV) {
 
-            case "upright": players[id].UpRight(); break;
-            case "upleft": players[id].UpLeft(); break;
+    for (const id in Game.players) {
 
-            case "rightdown": players[id].RightDown(); break;
-            case "downleft": players[id].DownLeft(); break;
-            default: continue
+        switch (Game.players[id].direction) {
+            case "up": Game.players[id].Up(); break;
+            case "right": Game.players[id].Right(); break;
+            case "down": Game.players[id].Down(); break;
+            case "left": Game.players[id].Left(); break;
+
+            case "upright": Game.players[id].UpRight(); break;
+            case "upleft": Game.players[id].UpLeft(); break;
+
+            case "rightdown": Game.players[id].RightDown(); break;
+            case "downleft": Game.players[id].DownLeft(); break;
+        }
+
+        Game.players[id].enemieInfo = {}
+
+        for (const enemie in Game.players) {
+            if (id !== enemie && is_In_Pov(Game.players[id], Game.players[enemie])) {
+                Game.players[id].enemieInfo[enemie] = {
+                    x: Game.players[enemie].x,
+                    y: Game.players[enemie].y,
+                    size: Game.players[enemie].size
+                }
+            } else delete Game.players[id].enemieInfo[enemie];
+        }
+
+        // if (ENV !== "pro") {
+        //     counter++
+        //     if (counter % 60 === 0) {
+        //         console.log("\n\n\n\n")
+        //         console.log(Game.players)
+        //     }
+        // }
+
+        counter++
+        if (counter % 60 === 0) {
+            for (const bullet of Game.players[id].bullets) {
+                bullet.position.x += bullet.speed;
+                if (is_In_Pov(Game, id, bullet)) {
+                    Game.players[id].enemieInfo[enemie] = {
+                        x: Game.players[enemie].x,
+                        y: Game.players[enemie].y,
+                        size: Game.players[enemie].size
+                    }
+                } else delete Game.players[id].enemieInfo[enemie];
+            }
         }
 
     }
-    io.emit("update", players);
+
+    io.emit("update", Game);
 }

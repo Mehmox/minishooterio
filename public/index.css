@@ -1,0 +1,25 @@
+/* css.css */
+* {
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: grey;
+}
+
+canvas {
+    background-color: white;
+}
+
+div {
+    width: 100px;
+    height: 100px;
+}
+
+#score {
+    background: rgb(80, 80, 80);
+}

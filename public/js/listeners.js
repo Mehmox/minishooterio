@@ -11,18 +11,20 @@ export default function Listeners(player) {
             player[event.key] = false
     });
 
-
+    let counter = 0
     function track(event) {
-        console.log(event.offsetX, event.offsetY);
+        counter++
+        if (counter % 1000 === 0) console.log(event.offsetX, event.offsetY);
+        if (event.target.id === "game") player.target = { x: event.offsetX, y: event.offsetY }
     }
 
     window.addEventListener("mousedown", () => {
-        player.fire = true
+        player.isShooting = true
         window.addEventListener("mousemove", track);
     });
 
     window.addEventListener("mouseup", () => {
-        player.fire = false
+        player.isShooting = false
         window.removeEventListener("mousemove", track)
     });
 }

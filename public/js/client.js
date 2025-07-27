@@ -4,19 +4,23 @@ import Listeners from "./listeners.js";
 
 const socket = io();
 const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+const score = document.getElementById("score");
+const divs = document.querySelectorAll("div");
 
-canvas.width = 1080;
-canvas.height = 720;
+canvas.style.backgroundRepeat = "no-repeat";
+
+const ctx = canvas.getContext("2d");
 ctx.lineWeight = 5;
 
-let Players = {}
-socket.on("update", (data) => {
-    Players = data
+let Game = {}
+socket.on("update", (game_data) => {
+    Game = game_data;
 });
 
 const player = {
-    fire: false,
+    isShooting: false,
+    lastShoot: Date.now(),
+    target: null,
     w: false,
     s: false,
     a: false,
@@ -24,12 +28,21 @@ const player = {
     lastDirection: "",
     self: null,
 }
-Listeners(player)
+Listeners(player);
 
-socket.on("login", (socket_id) => {
-    player.self = socket_id
+socket.on("login", (data) => {
+    player.self = data.id;
+    player.pov = data.game.pov;
+    canvas.width = player.pov.width;
+    canvas.height = player.pov.height;
+    divs.forEach((div) => {
+        div.style.width = player.pov.width / 2 + "px";
+        div.style.height = player.pov.height + "px";
+    });
+    canvas.style.backgroundImage = `url("/assets/Map${data.game.mapId}.png")`;
+    canvas.style.backgroundSize = `${data.game.width + player.pov.width}px ${data.game.height + player.pov.height}px`;
+    requestAnimationFrame(Update);
 });
-
 
 function Update() {
     var direction = ""
@@ -45,10 +58,12 @@ function Update() {
     }
 
 
+    if (Date.now() >= player.lastShoot && player.target !== null) {
+        player.lastShoot = Date.now() + 1000 / 20;
+        socket.emit("combat", { isShooting: player.isShooting, target: player.target });
+    }
 
-    Print(ctx, Players, player.self);
+    if (Game.players) Print(ctx, canvas, player, Game.players);
 
     requestAnimationFrame(Update);
 }
-
-requestAnimationFrame(Update);
