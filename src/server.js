@@ -9,12 +9,14 @@ const GameLoop = require("./Update/Update");
 const Game_settings = require("./Game_settings");
 const path = require("path");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.argv[2] || process.env.PORT ;
 const ENV = process.env.NODE_ENV;
 const FPS = 128;
+const MAX_NICK_BYTES = 9;
 Game_settings.mapId = Math.floor(Math.random() * 3) + 1;
 
 const app = express();
+const cors = require("cors");
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -23,6 +25,8 @@ const io = new Server(server, {
         methods: ['GET', 'POST']
     }
 });
+app.use(express.json());
+app.use(cors());
 
 if (ENV !== "development") {
 
@@ -30,10 +34,7 @@ if (ENV !== "development") {
 
     app.use(express.static(path.join(__dirname, "../build")));
 
-    app.get("/Start", (req, res) => res.sendFile(path.join(__dirname, "../build/index.html")));
-
 }
-
 
 const Game = {
     players: {},
@@ -49,6 +50,14 @@ const Game = {
 //     next();
 
 // });
+
+app.post("/check", (req, res) => {
+
+    const { nick } = req.body;
+
+    res.send(Buffer.byteLength(nick.trim(), "utf8") < MAX_NICK_BYTES);
+
+});
 
 const RATE_LIMIT = 20; // saniyede max 20 mesaj
 const INTERVAL = 1000; // 1 saniye
@@ -79,7 +88,7 @@ io.on("connect", (socket) => {
 
     socket.emit("login", { id: socket.id, settings: Game_settings, ENV, nick: user.nick });
 
-    Game.KDA[user.id] = { KDA: Game.players[user.id].KDA, nick: Game.players[user.id].userName };
+    Game.KDA[user.id] = { KDA: Game.players[user.id].KDA, nick: Game.players[user.id].nick };
 
     socket.on("ping", (res) => {
 

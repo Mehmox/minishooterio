@@ -160,7 +160,8 @@ module.exports = class Player {
             health: this.stats.health / this.baseStats.health * 100,
             nick: this.nick,
             enemyInfo: this.enemyInfo,
-            bulletInfo: this.bulletInfo
+            bulletInfo: this.bulletInfo,
+            KDA: this.KDA,
         }
 
     }

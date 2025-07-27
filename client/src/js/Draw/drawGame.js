@@ -16,6 +16,6 @@ export default function drawGame(ctx, canvas, player, user) {
 
     drawBullet(ctx, origin, player.bulletInfo, user);
 
-    drawBodys(ctx, origin, player.enemyInfo, user, player.health);
+    drawBodys(ctx, origin, player.enemyInfo, player.health, user);
 
 }

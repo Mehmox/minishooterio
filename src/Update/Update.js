@@ -60,8 +60,7 @@ module.exports = function GameLoop(Tick, io, Game) {
 
             });
             //update leaderBoard
-            Game.leaderboard = Object.values(Game.KDA);
-            Game.leaderboard.sort((a, b) => (b.KDA.kill + b.KDA.assist / 2) - (a.KDA.kill + a.KDA.assist / 2));
+            Game.leaderboard = Object.values(Game.KDA).sort((a, b) => (b.KDA.kill + b.KDA.assist / 2) - (a.KDA.kill + a.KDA.assist / 2));
             //updated game data send to all clients
             send(io, Game);
 

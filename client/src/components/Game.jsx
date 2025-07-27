@@ -36,11 +36,12 @@ export default function App({ nick }) {
         <main className="flex items-center bg-green-500">
 
             <section className="flex bg-gray-600">
+                
                 <div ref={mapDivRef} className="flex flex-col justify-end items-end">
 
                     <section className="flex my-0 p-0">
+                        <section ref={byteRef} className="mr-2"></section>
                         <section ref={pingRef} className="w-[80px]"></section>
-                        <section ref={byteRef} className="mr-7"></section>
                     </section>
 
                     <canvas id="map" ref={mapCanvasRef} className="w-60 h-60"></canvas>

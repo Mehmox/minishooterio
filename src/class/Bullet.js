@@ -12,7 +12,7 @@ module.exports = class Bullet {
             damage: 1,
             speed: 4 * (128 / player.FPS),
         }
-        this.distance = player.pov.width * 1.5;
+        this.distance = player.pov.width * 2.5;
         this.traveled = 0;
         this.position = { ...player.position };
         this.plus = this.normalize(player.combat.AMMO_SERVER_POS);

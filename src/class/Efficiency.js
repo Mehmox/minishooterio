@@ -8,14 +8,14 @@ module.exports = class name {
 
         this.startEnd = 0;
 
+        this.start = undefined;
+        this.end = undefined;
+
         this.second = { value: 0 };
 
         this.passed_second = 0;
 
         this.test_Time = { value: test_Time };
-
-        this.start = undefined;
-        this.end = undefined;
 
         this.second_Log = [];
         this.results = [];
@@ -34,10 +34,8 @@ module.exports = class name {
 
     now() {
 
-        if (this.config.log_Mode === "log") {
-
-            if (this.second.value <= this.test_Time.value) {
-
+        switch (this.config.log_Mode) {
+            case "linear":
                 if (this.startEnd % 2 === 0) {
 
                     this.start = performance.now();
@@ -46,108 +44,107 @@ module.exports = class name {
 
                     this.end = performance.now();
 
-                    this.second_Log.push(this.end - this.start)
+                    if (this.startEnd % 21 === 0) console.log(`${(this.end - this.start).toFixed(4)}ms!`);
 
-                    if (this.second.value !== this.passed_second) {
+                }
+                break;
+            case "log":
+                if (this.second.value <= this.test_Time.value) {
 
-                        this.passed_second = this.second.value;
+                    if (this.startEnd % 2 === 0) {
 
-                        this.results.push(this.second_Log);
+                        this.start = performance.now();
 
-                        this.second_Log = [];
+                    } else {
+
+                        this.end = performance.now();
+
+                        this.second_Log.push(this.end - this.start)
+
+                        if (this.second.value !== this.passed_second) {
+
+                            this.passed_second = this.second.value;
+
+                            this.results.push(this.second_Log);
+
+                            this.second_Log = [];
+
+                        }
 
                     }
 
                 }
 
-            }
+                if (this.startEnd === 0) {
 
-            if (this.startEnd === 0) {
+                    let last_update = 0;
+                    const second = this.second;
+                    const test_Time = this.test_Time.value;
+                    const results = this.results;
 
-                let last_update = 0;
-                const second = this.second;
-                const test_Time = this.test_Time.value;
-                const results = this.results;
+                    function Every_Second() {
 
-                function Every_Second() {
+                        if (second.value <= test_Time) {
 
-                    if (second.value <= test_Time) {
+                            second.value++;
 
-                        second.value++;
+                        } else {
+                            // console.log(this.results[0])
 
-                    } else {
-                        // console.log(this.results[0])
+                            let secondTotal = 0;
 
-                        let secondTotal = 0;
+                            results.forEach((secondData, second_index) => {
 
-                        results.forEach((secondData, second_index) => {
+                                console.log(`\n\nbetween ${second_index}-${second_index + 1} seconds:`);
 
-                            console.log(`\n\nbetween ${second_index}-${second_index + 1} seconds:`);
+                                secondData.forEach((currentTickData, tick_index) => {
 
-                            secondData.forEach((currentTickData, tick_index) => {
+                                    // let body = `\ttick: ${this.format(tick_index)}-${this.format(tick_index + 1)}     `;
 
-                                // let body = `\ttick: ${this.format(tick_index)}-${this.format(tick_index + 1)}     `;
+                                    // console.log(body + currentTickData + "ms");
 
-                                // console.log(body + currentTickData + "ms");
+                                    secondTotal += currentTickData;
 
-                                secondTotal += currentTickData;
+                                });
+
+                                console.log(`Avarage: ${secondTotal / secondData.length}.`);
+
+                                secondTotal = 0;
 
                             });
 
-                            console.log(`Avarage: ${secondTotal / secondData.length}.`);
+                            second.value++;
 
-                            secondTotal = 0;
-
-                        });
-
-                        second.value++;
-
-                    };
-
-                }
-
-                function Check() {
-
-                    const now = performance.now();
-
-                    if (now - last_update >= 1000) {
-
-                        Every_Second();
-
-                        last_update = now;
+                        };
 
                     }
 
+                    function Check() {
 
-                    if (second.value <= test_Time + 1) {
+                        const now = performance.now();
 
-                        setImmediate(() => Check());
+                        if (now - last_update >= 1000) {
+
+                            Every_Second();
+
+                            last_update = now;
+
+                        }
+
+
+                        if (second.value <= test_Time + 1) {
+
+                            setImmediate(() => Check());
+
+                        }
 
                     }
 
+                    Check();
+
                 }
-
-                Check();
-
-            }
+                break;
         }
-
-        if (this.config.log_Mode === "linear") {
-
-            if (this.startEnd % 2 === 0) {
-
-                this.start = performance.now();
-
-            } else {
-
-                this.end = performance.now();
-
-                if (this.startEnd % 21 === 0) console.log(`${(this.end - this.start).toFixed(3)}ms!`);
-
-            }
-
-        }
-
 
         this.startEnd++;
 

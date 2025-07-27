@@ -2,11 +2,11 @@
 import drawHealth from "./drawHealth.js";
 import drawNick from "./drawNick.js";
 
-export default function drawBody(ctx, origin, enemeys, user, health) {
-
-    ctx.fillStyle = "red";
+export default function drawBody(ctx, origin, enemeys, health, user) {
 
     enemeys.forEach(enemy => {
+
+        ctx.fillStyle = "red";
 
         const canvasPos = {
             x: enemy.x - origin.x,
@@ -22,7 +22,7 @@ export default function drawBody(ctx, origin, enemeys, user, health) {
 
         drawHealth(ctx, canvasPos.x, canvasPos.y, user.size, enemy.health, "red");
 
-        drawNick(ctx, canvasPos.x, canvasPos.y, enemy.nick);
+        drawNick(ctx, canvasPos.x, canvasPos.y, user.size, enemy.nick);
 
     });
 

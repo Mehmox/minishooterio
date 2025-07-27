@@ -30,15 +30,55 @@ export default function Listeners(client, socket) {
 
     window.addEventListener("keydown", (event) => {
 
-        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") movement[event.key] = true;
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault();
+        }
+
+        let key = event.key;
+
+        switch (key) {
+            case "ArrowUp": key = "w"; break;
+            case "ArrowDown": key = "s"; break;
+            case "ArrowLeft": key = "a"; break;
+            case "ArrowRight": key = "d"; break;
+        }
+
+        switch (key) {
+            case "w":
+            case "s":
+            case "a":
+            case "d":
+                movement[key] = true;
+                break;
+        }
 
         if (event.code === "Space") combat.isShooting = true;
 
-    });
+    }, { passive: false });
 
     window.addEventListener("keyup", (event) => {
 
-        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") movement[event.key] = false;
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault();
+        }
+
+        let key = event.key;
+
+        switch (key) {
+            case "ArrowUp": key = "w"; break;
+            case "ArrowDown": key = "s"; break;
+            case "ArrowLeft": key = "a"; break;
+            case "ArrowRight": key = "d"; break;
+        }
+
+        switch (key) {
+            case "w":
+            case "s":
+            case "a":
+            case "d":
+                movement[key] = false;
+                break;
+        }
 
         if (event.code === "Space") combat.isShooting = false;
 

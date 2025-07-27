@@ -14,7 +14,7 @@
         "combat": {
             "isShooting": false,
             "fireRate": 3,
-            "size": 7,
+            "size": 5,
             "AMMO_CLIENT_POS": null,
             "AMMO_SERVER_POS": null,
             "cooldown": 0

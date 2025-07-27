@@ -80,7 +80,7 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
 
     setInterval(() => {
 
-        socket.emit("combat", { isShooting: user.events.combat.isShooting, Muzzle_Direction: user.events.combat.Muzzle_Direction, direction});
+        socket.emit("combat", { isShooting: user.events.combat.isShooting, Muzzle_Direction: user.events.combat.Muzzle_Direction, direction });
 
     }, 1000 / 20);
 
@@ -100,7 +100,7 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
 
     Start.set(Update);
 
-    socket.on("login", ({ id, settings, ENV,nick }) => {
+    socket.on("login", ({ id, settings, ENV, nick }) => {
 
         user.id = id;
         user.nick = nick;
@@ -135,11 +135,11 @@ export default function client(socket, mapDiv, scoreDiv, map, canvas, score, pin
 
     socket.on("tick", (game_data) => {
 
-        byte.innerHTML = `Bytes: ${game_data.byteLength}`
+        byte.innerHTML = `Packets: ${game_data.byteLength} bytes`
 
         player = decoder(game_data);
 
-        // if (player.leaderboard) setLeaderBoard(player.leaderboard);
+        setLeaderBoard(player.leaderBoard);
 
         Start.check(2);
 

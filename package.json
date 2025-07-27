@@ -1,6 +1,6 @@
 {
-  "name": "mini_shooter_io",
-  "version": "0.0.6",
+"name": "mini_shooter_io",
+  "version": "0.0.7 ",
   "description": "my first 2D game try!",
   "author": "Mehmox",
   "license": "Proprietary",
@@ -13,7 +13,7 @@
     "i": "npm i --prefix client && npm i",
     "r": "rimraf node_modules client/node_modules",
     "dev": "concurrently \"cross-env REACT_APP_ENV=development npm run start --prefix client\" \"cross-env NODE_ENV=development PORT=3001 nodemon src/server.js\" ",
-    "build": "cross-env NODE_ENV=production npm run build --prefix client && cpy \"client/build/**\" \"build/\" --overwrite && rimraf client/build",
+    "build": "cross-env REACT_APP_ENV=production npm run build --prefix client && cpy \"client/build/**\" \"build/\" --overwrite && rimraf client/build",
     "test": "cross-env NODE_ENV=test PORT=8181 nodemon src/server.js",
     "start": "cross-env NODE_ENV=production PORT=8181 node src/server.js"
   },

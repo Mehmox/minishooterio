@@ -5,13 +5,13 @@ module.exports = function send(io, Game) {
     var GameBuffer = {};
 
     //encoding clients datas
-    const test = Object.entries(Game.players);
-    test.forEach(res => {
+    const players = Object.entries(Game.players);
+    players.forEach(res => {
 
         const id = res[0];
         const player = res[1].compact();
 
-        GameBuffer[id] = encode(player,Game.leaderboard);
+        GameBuffer[id] = encode(player, Game.leaderboard, players.length);
         j++;
 
     });
