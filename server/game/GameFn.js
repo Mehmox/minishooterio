@@ -4,7 +4,7 @@ const Game_settings = require("../../Game_settings.json");
 const GameLoop = require("./Update");
 
 const FPS = 128;
-const snapshotRate = FPS / 5;
+const snapshotRate = FPS / 4;
 const Game = {
     players: {},
     bullets: {},

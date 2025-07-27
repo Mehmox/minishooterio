@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const Routes = require("./router");
 const Gamefn = require("../game/GameFn");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.argv[2] || process.env.PORT ;
 const ENV = process.env.NODE_ENV;
 
 const io = new Server(server, {

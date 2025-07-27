@@ -1,4 +1,3 @@
-
 import Constants from "../../shared/Constants";
 
 const { nicklength,

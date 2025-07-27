@@ -82,7 +82,7 @@ export default function Home({ type, setNick, Menu, setMenu, options, SetOptions
 
         <h1 className="text-7xl mt-20">{type}</h1>
 
-        {Menu.Settings && <Settings className="z-[2] w-[65%] h-[80%] fixed border-2 rounded-3xl bg-gray-700 flex flex-col justify-center"
+        {Menu.Settings && <Settings className="z-[2] w-[65%] h-[80%] fixed border-2 rounded-3xl bg-black flex flex-col justify-center"
             options={options} SetOptions={SetOptions} />}
 
         <section className="w-screen h-screen flex flex-col justify-center items-center">

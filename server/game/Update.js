@@ -2,9 +2,9 @@ const eff = require("../../tools/Efficiency");
 
 const updateBullets = require("./update/updateBullets");
 const updatePlayers = require("./update/updatePlayers");
-const is_collision = require("../core/checkCollisions");
-const SetBullets = require("../core/setBullets");
-const SetEnemys = require("../core/setEnemys");
+const is_collision = require("../mechanics/checkCollisions");
+const SetBullets = require("../mechanics/setBullets");
+const SetEnemys = require("../mechanics/setEnemys");
 const send = require("../net/send");
 // const { leech, leechAsync } = require("../../tools/leech");
 
