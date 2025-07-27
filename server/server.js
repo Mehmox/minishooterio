@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 
 const Routes = require("./router");
-const Gamefn = require("../game/GameFn");
+const Gamefn = require("./game/GameFn");
 
 const PORT = process.argv[2] || process.env.PORT ;
 const ENV = process.env.NODE_ENV;
@@ -22,10 +22,10 @@ app.use("/", Routes);
 
 if (ENV !== "development") {
 
-    app.use(express.static(path.join(__dirname, "../../build")));
+    app.use(express.static(path.join(__dirname, "../build")));
     
     // app.get("*", (req, res) => {
-    //     res.sendFile(path.join(__dirname, "../../build/index.html"));
+    //     res.sendFile(path.join(__dirname, "../build/index.html"));
     // });
 
     console.log("build served\n");

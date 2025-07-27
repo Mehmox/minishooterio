@@ -10,7 +10,7 @@ module.exports = function updateBullets(bullets) {
         bullet.position.x += traveledPath.x;
         bullet.position.y += traveledPath.y;
 
-        bullet.traveled += (Math.abs(traveledPath.x) + Math.abs(traveledPath.y));
+        bullet.traveled += bullet.stats.speed
 
     });
 

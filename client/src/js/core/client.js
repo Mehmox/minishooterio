@@ -51,13 +51,14 @@ export default function client(
 
             const now = performance.now();
 
-            const t = Math.min(1, (now - lastSnapshotTime) / SnapshotDelta);
+            // if (now - lastSnapshotTime > max) {
+            //     max = now - lastSnapshotTime
+            //     console.log(max)
+            //     console.log({ after: now, before: lastSnapshotTime })
+            // }
 
-            if (now - lastSnapshotTime > max) {
-                max = now - lastSnapshotTime
-                // console.log(max, { after: now, before: lastSnapshotTime })
-            }
-            console.log("looping!");
+            const t = Math.min(1, (now - lastSnapshotTime) / SnapshotDelta);
+            // console.log("looping!", t);
             PrintGame({ ctxg, ctxm }, player, map, options[0].value, user, t);
 
         }
@@ -125,7 +126,7 @@ export default function client(
 
     socket.on("tick", (game_data) => Tick(game_data));
 
-    const ClearListener = Listeners(user, data.lerp, setTest, { setTabs });
+    const ClearListener = Listeners(user, data.lerp,canvas, setTest, { setTabs });
 
     return () => {
         socket.off("tick", Tick);

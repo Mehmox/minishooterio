@@ -1,4 +1,4 @@
-module.exports = function checkCollisions(Player, Bullet) {
+module.exports = function Collisions(Player, Bullet) {
 
     if (Player.id !== Bullet.owner) {
 

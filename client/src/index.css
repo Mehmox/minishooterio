@@ -4,6 +4,7 @@
 
 * {
     margin: 0;
+    user-select: none;
 }
 
 #root {
@@ -17,7 +18,6 @@
 canvas {
     background-color: white;
 }
-
 
 .inputs {
     @apply w-input h-16 pb-3 pl-5 text-5xl rounded-[16px]

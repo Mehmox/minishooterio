@@ -1,4 +1,3 @@
-//tools/leech.js
 function leechAsync(iterations, chunkSize = 10000) {
 
     return new Promise((resolve) => {
@@ -35,7 +34,7 @@ function leechAsync(iterations, chunkSize = 10000) {
     });
 }
 
-function leech(leech = 100000000) {
+function leech(leech = 40_000_000) {
     
     var counter = 0;
 

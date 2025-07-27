@@ -9,9 +9,9 @@ module.exports = class Bullet {
         this.stats = {
             size: 7,
             damage: 1,
-            speed: 4 * (128 / player.FPS),
+            speed: 8,
         }
-        this.distance = player.pov.width * 2;
+        this.distance = 1000;
         this.traveled = 0;
         this.position = { ...player.position };
         this.plus = this.normalize(player.combat.AMMO_SERVER_POS);
@@ -19,9 +19,10 @@ module.exports = class Bullet {
             x: this.position.x + this.plus.x,
             y: this.position.y + this.plus.y
         }
-
         this.playerSize = player.stats.size;
         this.history = new Set();
+
+        this.birth = performance.now();
 
     }
 

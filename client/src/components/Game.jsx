@@ -18,8 +18,6 @@ export default function Game({ nick, options }) {
     const gameRef = useRef(null);
     const mapRef = useRef(null);
 
-    const Color = options[0].value ? "white" : "black";
-
     const data = useRef({
         leaderboard: useRef(),
         ping: useRef(),
@@ -55,11 +53,11 @@ export default function Game({ nick, options }) {
     return <main className="h-screen flex flex-col justify-center items-center relative">
 
         <Quit onClick={() => navigate("/register")}
-            className={`z-[1] absolute left-[10px] top-[10px] w-14 h-14 border-4 border-solid rounded-md`}
-            color={Color} />
+            className={`z-[1] absolute left-[10px] top-[10px] w-12 h-12 border-[1px] border-solid border-[rgb(137,137,137)] rounded-md bg-[rgba(181,181,181,0.73)]`}
+            color="white"/>
 
         <Map className="z-[1] absolute bottom-0 right-0"
-            color={Color}
+            color={options[0].value ? "white" : "black"}
             mapRef={mapRef}
             data={data.current}
         />

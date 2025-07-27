@@ -1,5 +1,6 @@
 import drawHealth from "./drawHealth.js";
 import drawNick from "./drawNick.js";
+import drawMuzzle from "./drawMuzzle.js";
 import lerp from "../core/Lerp.js";
 
 export default function drawBody(ctx, origin, { prev, next }, health, user, t, bg) {
@@ -29,16 +30,20 @@ export default function drawBody(ctx, origin, { prev, next }, health, user, t, b
     });
 
     //draw user
+
     ctx.fillStyle = "rgb(51,153,255)";
     ctx.beginPath();
 
-    ctx.arc(user.pov.width / 2, user.pov.height / 2, user.size, 0, Math.PI * 2);
+    ctx.arc(window.innerWidth / 2, window.innerHeight / 2, user.size, 0, Math.PI * 2);
 
     ctx.fill();
+
     ctx.closePath();
 
-    drawHealth(ctx, user.pov.width / 2, user.pov.height / 2, user.size, health, "green");
+    // drawMuzzle(ctx, user.size);
 
-    drawNick(ctx, user.pov.width / 2, user.pov.height / 2, user.size, user.nick, bg);
+    drawHealth(ctx, window.innerWidth / 2, window.innerHeight / 2, user.size, health, "green");
+
+    drawNick(ctx, window.innerWidth / 2, window.innerHeight / 2, user.size, user.nick, bg);
 
 }

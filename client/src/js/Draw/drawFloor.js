@@ -1,15 +1,15 @@
-export default function drawFloor(ctx, { width, height }, lerpX, lerpY, bg) {
+export default function drawFloor(ctx, lerpX, lerpY, bg) {
 
     ctx.lineWidth = 0.3;
     ctx.strokeStyle = bg ? "White" : "Black";
 
     ctx.beginPath();
 
-    for (let i = -(lerpY % 1000); i <= height; i += 30) {
+    for (let i = -(lerpY % 1000); i <= window.innerHeight; i += 30) {
 
         ctx.moveTo(0, i);
 
-        ctx.lineTo(width, i);
+        ctx.lineTo(window.innerWidth, i);
 
     }
 
@@ -18,11 +18,11 @@ export default function drawFloor(ctx, { width, height }, lerpX, lerpY, bg) {
 
     ctx.beginPath();
 
-    for (let i = -(lerpX % 1000); i <= width; i += 30) {
+    for (let i = -(lerpX % 1000); i <= window.innerWidth; i += 30) {
 
         ctx.moveTo(i, 0);
 
-        ctx.lineTo(i, height);
+        ctx.lineTo(i, window.innerHeight);
 
     }
 

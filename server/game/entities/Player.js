@@ -12,10 +12,8 @@ module.exports = class Player {
         this.nick = nick;
 
         this.stats = { ...Game_settings.player.stats };
-        this.stats.speed *= (128 / FPS);
 
         this.baseStats = { ...this.stats };
-        this.baseStats.speed *= (128 / FPS);
 
         this.combat = Game_settings.player.combat;
 
@@ -39,13 +37,12 @@ module.exports = class Player {
         switch (this.ENV) {
 
             case "production":
-            case "test":
                 this.position = {
                     x: Math.random() * (this.mapWidth) + this.stats.size * 2,
                     y: Math.random() * (this.mapHeight) + this.stats.size * 2,
                 }; break;
-
-            default: this.position = { x: 3000, y: 3000 }; break;
+            case "test":
+            default: this.position = { x: 100, y: 2000 }; break;
 
         }
 

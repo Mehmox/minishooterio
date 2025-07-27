@@ -1,5 +1,4 @@
-//tools/Efficiency.js
-module.exports = class name {
+class Efficiency {
 
     constructor() {
 
@@ -20,7 +19,7 @@ module.exports = class name {
 
     }
 
-    now() {
+    check() {
 
         if (this.startEnd % 2 === 0) {
 
@@ -39,3 +38,6 @@ module.exports = class name {
     }
 
 }
+
+
+module.exports = new Efficiency();

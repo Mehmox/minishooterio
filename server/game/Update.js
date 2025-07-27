@@ -1,18 +1,16 @@
-const eff = require("../../tools/Efficiency");
+const Efficiency = require("../../tools/Efficiency");
+// const { leech, leechAsync } = require("../../tools/leech");
 
 const updateBullets = require("./update/updateBullets");
 const updatePlayers = require("./update/updatePlayers");
-const is_collision = require("../mechanics/checkCollisions");
-const SetBullets = require("../mechanics/setBullets");
-const SetEnemys = require("../mechanics/setEnemys");
+const is_collision = require("./mechanics/collisions");
+const SetBullets = require("./mechanics/setBullets");
+const SetEnemys = require("./mechanics/setEnemys");
 const send = require("../net/send");
-// const { leech, leechAsync } = require("../../tools/leech");
-
-const Efficiency = new eff();
-
 module.exports = function GameLoop(Tick, snapshotTick, io, Game) {
 
     const ms = 1000 / Tick;
+    const delay = ms * 0.2;
     let GameTick = 0;
     let Last_Update_Time = performance.now();
     const snapshot = Tick / snapshotTick;
@@ -20,10 +18,11 @@ module.exports = function GameLoop(Tick, snapshotTick, io, Game) {
     function Update() {
 
         const now = performance.now();
+        const delta = now - Last_Update_Time;
 
-        if (now - Last_Update_Time >= ms) {
+        if (delta >= ms) {
 
-            // Efficiency.now();
+            // Efficiency.check();
 
             GameTick++;
 
@@ -65,11 +64,12 @@ module.exports = function GameLoop(Tick, snapshotTick, io, Game) {
 
             Last_Update_Time = now;
 
-            // Efficiency.now();
+            // Efficiency.check();
 
-        }
+            setTimeout(Update, Object.keys(Game.players).length ? delay : 1000);
 
-        setImmediate(() => Update());
+
+        } else setImmediate(Update);
 
     }
 

@@ -1,1 +1,0 @@
-clientin mause konumuna göre namlu çizdirme.

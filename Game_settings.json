@@ -3,18 +3,18 @@
     "height": 4000,
     "player": {
         "stats": {
-            "health": 2,
-            "size": 30,
-            "speed": 2
+            "health": 4,
+            "size": 25,
+            "speed": 4
         },
         "pov": {
             "width": 1920,
-            "height": 914
+            "height": 925
         },
         "combat": {
             "isShooting": false,
             "fireRate": 3,
-            "size": 12,
+            "size": 6,
             "AMMO_CLIENT_POS": null,
             "AMMO_SERVER_POS": null,
             "cooldown": 0
@@ -26,25 +26,16 @@
             "height": 4000
         },
         "player": {
-            "stats": {
-                "health": 2,
-                "size": 25,
-                "speed": 2
-            },
-            "pov": {
-                "width": 1400,
-                "height": 925
-            }
+            "health": 4,
+            "speed": 5,
+            "size": 30,
+            "fireRate": 3
         },
         "bullet": {
-            "size": 6
-        },
-        "client": {
-            "isShooting": false,
-            "cooldown": 0,
-            "fireRate": 3,
-            "AMMO_CLIENT_POS": null,
-            "AMMO_SERVER_POS": null
+            "lifespan": 6,
+            "speed": 5,
+            "size": 12,
+            "damage": 1
         }
     }
 }

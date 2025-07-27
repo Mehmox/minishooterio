@@ -8,7 +8,13 @@ const {
 } = require("../../client/src/shared/Constants");
 
 const top_player_length = 10;
-
+//000000000
+//000000001
+//000000010
+//000000011
+//000000100
+256
+-127 +128
 module.exports = function encode(player, leaderBoard, totalPlayers) {
 
     const enemy_Num = Object.keys(player.enemyInfo).length;
@@ -25,7 +31,7 @@ module.exports = function encode(player, leaderBoard, totalPlayers) {
     //enemy, bullet, leaderboard number
     data.writeUInt8(enemy_Num, 0);
     data.writeUInt8(bullet_Num, 1);
-    data.writeUInt8(board_Num, 2);
+    // data.writeUInt8(board_Num, 2);
 
     //self
     data.writeUInt32LE(player.x * 1000, 3);
@@ -56,18 +62,18 @@ module.exports = function encode(player, leaderBoard, totalPlayers) {
 
     });
 
-    //leaderboard
-    for (let i = 0; i < board_Num && i < leaderBoard.length; i++) {
+    // //leaderboard
+    // for (let i = 0; i < board_Num && i < leaderBoard.length; i++) {
 
-        const offset = gap + enemys_bytes + bullets_bytes + i * board_bytes;
+    //     const offset = gap + enemys_bytes + bullets_bytes + i * board_bytes;
 
-        data.writeUInt8(leaderBoard[i].KDA.kill > 255 ? 255 : leaderBoard[i].KDA.kill, offset);
-        data.writeUInt8(leaderBoard[i].KDA.dead > 255 ? 255 : leaderBoard[i].KDA.dead, offset + 1);
-        data.writeUInt8(leaderBoard[i].KDA.assist > 255 ? 255 : leaderBoard[i].KDA.assist, offset + 2);
-        data.writeUInt8(Buffer.from(leaderBoard[i].nick).byteLength, offset + 3);
-        data.write(leaderBoard[i].nick, offset + 4, nicklength, "utf-8");
+    //     data.writeUInt8(leaderBoard[i].KDA.kill > 255 ? 255 : leaderBoard[i].KDA.kill, offset);
+    //     data.writeUInt8(leaderBoard[i].KDA.dead > 255 ? 255 : leaderBoard[i].KDA.dead, offset + 1);
+    //     data.writeUInt8(leaderBoard[i].KDA.assist > 255 ? 255 : leaderBoard[i].KDA.assist, offset + 2);
+    //     data.writeUInt8(Buffer.from(leaderBoard[i].nick).byteLength, offset + 3);
+    //     data.write(leaderBoard[i].nick, offset + 4, nicklength, "utf-8");
 
-    }
+    // }
 
     return data;
 

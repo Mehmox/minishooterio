@@ -1,6 +1,6 @@
 import lerp from "../core/Lerp";
 
-export default function Listeners(client, Interpolate, setTest, { setTabs }) {
+export default function Listeners(client, Interpolate, canvas, setTest, { setTabs }) {
 
     const movement = client.movement;
     const combat = client.combat;
@@ -88,11 +88,23 @@ export default function Listeners(client, Interpolate, setTest, { setTabs }) {
         }
 
     }
-
+    // let test = 0;
     function onMouseMove(event) {
-
-        combat.Muzzle_Direction = { x: event.clientX, y: event.clientY };
-
+        // test++;
+        // if (test % 300 === 0) {
+        //     console.log("client")
+        //     console.log(event.clientX, event.clientY)
+        //     console.log("page")
+        //     console.log(event.pageX, event.pageY)
+        //     console.log("screen")
+        //     console.log(event.screenX, event.screenY)
+        //     console.log("x-y")
+        //     console.log(event.x, event.y)
+        //     console.log("\n")
+        // }
+        combat.Muzzle_Direction = { x: event.clientX / window.innerWidth * 1920, y: event.clientY / window.innerHeight * (window.innerHeight - 155) };
+        // console.log(event.clientX, event.clientY)
+        // console.log(combat.Muzzle_Direction)
     }
 
     function onMouseDown(event) {
@@ -107,22 +119,25 @@ export default function Listeners(client, Interpolate, setTest, { setTabs }) {
 
     }
 
-    function onResize(event) {
+    function onResize() {
 
-        setTest({
-            outer: {
-                Width: event.currentTarget.outerWidth,
-                Height: event.currentTarget.outerHeight,
-            },
-            inner: {
-                Width: event.srcElement.innerWidth,
-                Height: event.srcElement.innerHeight,
-            },
-            avail: {
-                Width: event.target.screen.availWidth,
-                Height: event.target.screen.availHeight,
-            }
-        })
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // setTest({
+        //     outer: {
+        //         Width: event.currentTarget.outerWidth,
+        //         Height: event.currentTarget.outerHeight,
+        //     },
+        //     inner: {
+        //         Width: event.srcElement.innerWidth,
+        //         Height: event.srcElement.innerHeight,
+        //     },
+        //     avail: {
+        //         Width: event.target.screen.availWidth,
+        //         Height: event.target.screen.availHeight,
+        //     }
+        // })
 
     }
 
@@ -133,6 +148,8 @@ export default function Listeners(client, Interpolate, setTest, { setTabs }) {
     window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
     window.addEventListener("resize", onResize);
+
+    window.dispatchEvent(new Event('resize'));
 
     return () => {
 

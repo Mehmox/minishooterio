@@ -2,8 +2,8 @@ import lerp from "../core/Lerp";
 
 export default function drawMap(ctx, map, { prev, next }, bg, { size, pov }, t) {
 
-    const x = lerp.use(prev.x, next.x, t);
-    const y = lerp.use(prev.y, next.y, t);
+    const x = lerp.use(prev.x, next ? next.x : prev.x, t);
+    const y = lerp.use(prev.y, next ? next.y : prev.y, t);
 
     ctx.lineWidth = 30;
     ctx.fillStyle = "blue";

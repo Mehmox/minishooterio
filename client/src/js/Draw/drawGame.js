@@ -12,11 +12,11 @@ export default function drawGame({ ctxg, ctxm }, player, map, bg, user, t) {
     const lerpY = lerp.use(player.prev.y, player.next.y, t);
 
     const origin = {
-        x: lerpX - user.pov.width / 2,
-        y: lerpY - user.pov.height / 2
+        x: lerpX - window.innerWidth / 2,
+        y: lerpY - window.innerHeight / 2
     }
 
-    drawFloor(ctxg, user.pov, lerpX, lerpY, bg);
+    drawFloor(ctxg, lerpX, lerpY, bg);
 
     drawBullet(ctxg, origin, player, user, t);
 

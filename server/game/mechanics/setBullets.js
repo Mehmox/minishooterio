@@ -9,9 +9,7 @@ module.exports = function SetBullets(player, bullets) {
         if (bullet.traveled >= bullet.distance) {
             delete bullets[bullet.id];
             return;
-        }
-
-        if (is_In_Pov(player, bullet)) {
+        } else if (is_In_Pov(player, bullet)) {
 
             player.bulletInfo[bullet.id] = {
                 x: bullet.position.x,

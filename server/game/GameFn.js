@@ -3,8 +3,8 @@ const Game_settings = require("../../Game_settings.json");
 
 const GameLoop = require("./Update");
 
-const FPS = 128;
-const snapshotRate = FPS / 4;
+const Tick = 60;
+const snapshotRate = 20;
 const Game = {
     players: {},
     bullets: {},
@@ -20,7 +20,7 @@ module.exports = function Gamefn(io, ENV) {
 
         if (nick === "undefined") nick = "";
 
-        const user = new Player(socket.id, FPS, ENV, Game_settings, nick);
+        const user = new Player(socket.id, Tick, ENV, Game_settings, nick);
 
         Game.players[user.id] = user;
 
@@ -67,6 +67,6 @@ module.exports = function Gamefn(io, ENV) {
 
     });
 
-    GameLoop(FPS, snapshotRate, io, Game);
+    GameLoop(Tick, snapshotRate, io, Game);
 
 }
