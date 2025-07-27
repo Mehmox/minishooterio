@@ -1,0 +1,26 @@
+{
+"name": "mini_shooter_io",
+  "description": "my first 2D game try!",
+  "author": "Mehmox",
+  "license": "Proprietary",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mehmox/minishooterio.git"
+  },
+  "scripts": {
+    "dev": "nodemon routes/server.js",
+    "start": "node routes/server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.1",
+    "react-router-dom": "^7.5.3",
+    "socket.io": "^4.8.1"
+  }
+}

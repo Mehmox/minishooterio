@@ -1,15 +1,15 @@
-//client/src/js/Draw/drawFloor.js
-export default function drawFloor(type, ctx, { width, height }, { x, y }) {
+export default function drawFloor(ctx, { width, height }, lerpX, lerpY, bg) {
 
-    ctx.lineWidth = (type === "Game" ? 0.1 : 100);
+    ctx.lineWidth = 0.3;
+    ctx.strokeStyle = bg ? "White" : "Black";
 
     ctx.beginPath();
 
-    for (let i = (type === "Game" ? -(y % 1000) : 0); i <= width; i += (type === "Game" ? 30 : 2000)) {
+    for (let i = -(lerpY % 1000); i <= height; i += 30) {
 
         ctx.moveTo(0, i);
 
-        ctx.lineTo(height, i);
+        ctx.lineTo(width, i);
 
     }
 
@@ -18,11 +18,11 @@ export default function drawFloor(type, ctx, { width, height }, { x, y }) {
 
     ctx.beginPath();
 
-    for (let i = (type === "Game" ? -(x % 1000) : 0); i <= height; i += (type === "Game" ? 30 : 2000)) {
+    for (let i = -(lerpX % 1000); i <= width; i += 30) {
 
         ctx.moveTo(i, 0);
 
-        ctx.lineTo(i, width);
+        ctx.lineTo(i, height);
 
     }
 

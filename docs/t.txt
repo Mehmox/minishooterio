@@ -1,0 +1,64 @@
+mini_io_shooter/
+├── build/
+│   ├── static/
+│   │   ├── css/
+│   │   └── js/
+│   ├── asset-manifest.json
+│   └── index.html
+├── client/
+│   ├── node_modules
+│   ├── public/            
+│   │   └── index.html    
+│   ├── src/            
+│   │   ├── components/
+│   │   │   ├── customs/
+│   │   │   │   └── Quit.jsx
+│   │   │   ├── Game.jsx
+│   │   │   ├── Home.jsx
+│   │   │   └── LeaderBoard.jsx
+│   │   ├── js/       
+│   │   │   ├── class/
+│   │   │   │   ├── Check.js        
+│   │   │   │   └── LinkedList.js
+│   │   │   ├── Draw/
+│   │   │   │   ├── drawBody.js
+│   │   │   │   ├── drawBullet.js
+│   │   │   │   ├── drawFloor.js
+│   │   │   │   ├── drawGame.js
+│   │   │   │   ├── drawHealth.js
+│   │   │   │   ├── drawMap.js
+│   │   │   │   └── drawNick.js     
+│   │   │   ├── client.js
+│   │   │   ├── decoder.js         
+│   │   │   └── listeners.js        
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   ├── index.jsx
+│   │   └── Quit.css
+│   ├── package.json
+│   └── tailwind.config.js
+├── src/
+│   ├── class/            
+│   │   ├── Bullet.js     
+│   │   └── Player.js               
+│   ├── Update/       
+│   │   ├── positions/            
+│   │   │   ├── updateBullets.js 
+│   │   │   └── updatePlayers.js        
+│   │   ├── Pov/          
+│   │   │   ├── inPov.js
+│   │   │   ├── setBullets.js
+│   │   │   └── setEnemys.js
+│   │   ├── Send/          
+│   │   │   ├── encoder.js
+│   │   │   └── send.js
+│   │   ├── collision.js          
+│   │   └── Update.js
+│   ├── Routes/            
+│   │   ├── index.js 
+│   │   └── Schema.js            
+│   ├── Game_settings.json        
+│   ├── GameFn.js
+│   └── server.js
+├── .gitignore
+└── package.json

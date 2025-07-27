@@ -1,13 +1,14 @@
-//client/src/js/Draw/drawBullet.js
-export default function drawBullet(ctx, origin, bullets, user) {
+import lerp from "../core/Lerp";
+
+export default function drawBullet(ctx, origin, { prev, next }, user, t) {
 
     ctx.lineWidth = 1;
 
-    bullets.forEach(bullet => {
+    prev.bulletInfo.forEach((bullet, index) => {
 
         const canvasBulletPos = {
-            x: bullet.x - origin.x,
-            y: bullet.y - origin.y,
+            x: lerp.use(bullet.x, next.bulletInfo[index] ? next.bulletInfo[index].x : bullet.x, t) - origin.x,
+            y: lerp.use(bullet.y, next.bulletInfo[index] ? next.bulletInfo[index].y : bullet.y, t) - origin.y,
         }
 
         ctx.beginPath();
@@ -19,7 +20,6 @@ export default function drawBullet(ctx, origin, bullets, user) {
 
         ctx.fill();
         ctx.closePath();
-        ctx.stroke();
 
     });
 

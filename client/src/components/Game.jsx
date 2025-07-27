@@ -1,28 +1,36 @@
-//client/src/components/Game.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
 
+import client from "../js/core/client.js";
+
 import Quit from "./customs/Quit.jsx";
-import LeaderBoard from "./LeaderBoard.jsx";
-import client from "../js/client.js";
+import Map from "./Map.jsx";
+import Tab from "./Tab.jsx";
 
 const ENV = process.env.REACT_APP_ENV;
 
-export default function Game({ nick }) {
+export default function Game({ nick, options }) {
 
     const navigate = useNavigate();
 
-    const socket = useRef()
+    const socket = useRef(null);
+    const gameRef = useRef(null);
+    const mapRef = useRef(null);
 
-    const [leaderboard, setLeaderBoard] = useState([]);
-    const mapDivRef = useRef(null);
-    const scoreDivRef = useRef(null);
-    const mapCanvasRef = useRef(null);
-    const gameCanvasRef = useRef(null);
-    const scoreRef = useRef(null);
-    const pingRef = useRef(null);
-    const byteRef = useRef(null);
+    const Color = options[0].value ? "white" : "black";
+
+    const data = useRef({
+        leaderboard: useRef(),
+        ping: useRef(),
+        net: useRef(),
+        dev: useRef()
+    });
+
+    const [tabs, setTabs] = useState({
+        Tab: false,
+    });
+    const [test, setTest] = useState();
 
     useEffect(() => {
 
@@ -30,43 +38,38 @@ export default function Game({ nick }) {
             query: { nick }
         })
 
-        return () => socket.current.disconnect();
+        const CleanUp = client({
+            socket: socket.current,
+            canvas: gameRef.current,
+            map: mapRef.current,
+        }, data.current, options, setTabs, setTest)
+
+        return () => {
+            CleanUp();
+            socket.current.disconnect();
+            console.log("Game.jsx unmounted");
+        }
 
     }, []);
 
-    useEffect(() => client(socket.current, mapDivRef.current, scoreDivRef.current, mapCanvasRef.current, gameCanvasRef.current, scoreRef.current, pingRef.current, byteRef.current, setLeaderBoard), []);
+    return <main className="h-screen flex flex-col justify-center items-center relative">
 
-    return <section className="h-screen flex flex-col justify-between">
+        <Quit onClick={() => navigate("/register")}
+            className={`z-[1] absolute left-[10px] top-[10px] w-14 h-14 border-4 border-solid rounded-md`}
+            color={Color} />
 
-        <section className="w-28 h-16 absolute left-0 top-0"><Quit onClick={() => navigate("/login")}>Quit</Quit></section>
+        <Map className="z-[1] absolute bottom-0 right-0"
+            color={Color}
+            mapRef={mapRef}
+            data={data.current}
+        />
 
-        <main className="flex items-center bg-green-500">
+        {tabs.Tab && <Tab className="w-[1000px] h-[400px] border-2 rounded-md rgba(174,174,174,1)"
+            leaderboard={data.leaderboard}
+            dev={test} />}
 
-            <section className="flex bg-gray-600">
+        <canvas id="game" ref={gameRef} className="z-[0] w-screen h-screen " />
 
-                <div ref={mapDivRef} className="flex flex-col justify-end items-end">
-
-                    <section className="flex my-0 p-0">
-                        <section ref={byteRef} className="mr-2"></section>
-                        <section ref={pingRef} className="w-[80px]"></section>
-                    </section>
-
-                    <canvas id="map" ref={mapCanvasRef} className="w-60 h-60"></canvas>
-
-                </div>
-
-                <canvas id="game" ref={gameCanvasRef} ></canvas>
-
-                <div ref={scoreDivRef} className="flex justify-end items-end">
-
-                    <LeaderBoard ref={scoreRef} leaderboard={leaderboard} />
-
-                </div>
-
-            </section>
-
-        </main>
-
-    </section>;
+    </main>;
 
 }

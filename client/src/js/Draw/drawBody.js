@@ -1,18 +1,18 @@
-//client/src/js/Draw/drawBody.js
 import drawHealth from "./drawHealth.js";
 import drawNick from "./drawNick.js";
+import lerp from "../core/Lerp.js";
 
-export default function drawBody(ctx, origin, enemeys, health, user) {
+export default function drawBody(ctx, origin, { prev, next }, health, user, t, bg) {
 
     ctx.lineWidth = 1;
 
-    enemeys.forEach(enemy => {
+    prev.enemyInfo.forEach((enemy, index) => {
 
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "rgb(255,0,0)";
 
         const canvasPos = {
-            x: enemy.x - origin.x,
-            y: enemy.y - origin.y,
+            x: lerp.use(enemy.x, next.enemyInfo[index] ? next.enemyInfo[index].x : enemy.x, t) - origin.x,
+            y: lerp.use(enemy.y, next.enemyInfo[index] ? next.enemyInfo[index].y : enemy.y, t) - origin.y,
         }
 
         ctx.beginPath();
@@ -24,12 +24,12 @@ export default function drawBody(ctx, origin, enemeys, health, user) {
 
         drawHealth(ctx, canvasPos.x, canvasPos.y, user.size, enemy.health, "red");
 
-        drawNick(ctx, canvasPos.x, canvasPos.y, user.size, enemy.nick);
+        drawNick(ctx, canvasPos.x, canvasPos.y, user.size, enemy.nick, bg);
 
     });
 
     //draw user
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "rgb(51,153,255)";
     ctx.beginPath();
 
     ctx.arc(user.pov.width / 2, user.pov.height / 2, user.size, 0, Math.PI * 2);
@@ -39,6 +39,6 @@ export default function drawBody(ctx, origin, enemeys, health, user) {
 
     drawHealth(ctx, user.pov.width / 2, user.pov.height / 2, user.size, health, "green");
 
-    drawNick(ctx, user.pov.width / 2, user.pov.height / 2, user.size, user.nick);
+    drawNick(ctx, user.pov.width / 2, user.pov.height / 2, user.size, user.nick, bg);
 
 }

@@ -1,8 +1,7 @@
-//client/src/js/Draw/drawNick.js
-export default function drawNick(ctx, x, y, size, nick) {
+export default function drawNick(ctx, x, y, size, nick, bg) {
 
-    ctx.font = "41px Arial";
-    ctx.fillStyle = "#ffffff";
+    ctx.font = "33px Arial";
+    ctx.fillStyle = bg ? "White" : "Black";
     ctx.textAlign = "center";
 
     ctx.beginPath();

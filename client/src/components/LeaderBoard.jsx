@@ -1,13 +1,20 @@
-//client/src/components/LeaderBoard.jsx
-export default function LeaderBoard({ ref, leaderboard }) {
+export default function LeaderBoard({ leaderboard }) {
 
-    return <div ref={ref} className="flex flex-col justify-between bg-blue-600">
+    return <table className="max-w-52">
 
-        <ul className="max-w-52">
-            {leaderboard && leaderboard.map((player, index) => (
-                <li key={index}>{`${index + 1}. ${player.kill}/${player.dead}/${player.assist} ${player.nick}`}</li>
-            ))}
-        </ul>
+        <tbody>
 
-    </div>
+            {leaderboard && Object.entries(leaderboard).map((player, index) => (<tr key={index}>
+                <td className="px-4">{index + 1}</td>
+                <td>{player.kill}</td>
+                <td>/</td>
+                <td>{player.dead}</td>
+                <td>/</td>
+                <td>{player.assist}</td>
+                <td className="px-4">{player.nick}</td>
+            </tr>))}
+
+        </tbody>
+
+    </table>
 } 

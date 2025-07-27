@@ -1,25 +1,27 @@
-//client/src/js/Draw/drawGame.js
 import drawFloor from "./drawFloor.js";
 import drawBullet from "./drawBullet.js";
 import drawBodys from "./drawBody.js";
+import PrintMap from "../draw/drawMap.js";
+import lerp from "../core/Lerp.js";
 
-function lerp(start, end, t) {
-    return start + (end - start) * t;
-}
+export default function drawGame({ ctxg, ctxm }, player, map, bg, user, t) {
 
-export default function drawGame(ctx, player, user, t) {
+    ctxg.clearRect(0, 0, user.pov.width, user.pov.height);
 
-    ctx.clearRect(0, 0, user.pov.width, user.pov.height);
+    const lerpX = lerp.use(player.prev.x, player.next.x, t);
+    const lerpY = lerp.use(player.prev.y, player.next.y, t);
 
     const origin = {
-        x: player.x - user.pov.width / 2,
-        y: player.y - user.pov.height / 2
+        x: lerpX - user.pov.width / 2,
+        y: lerpY - user.pov.height / 2
     }
 
-    drawFloor("Game", ctx, user.pov, player, t);
+    drawFloor(ctxg, user.pov, lerpX, lerpY, bg);
 
-    drawBullet(ctx, origin, player.bulletInfo, user, t);
+    drawBullet(ctxg, origin, player, user, t);
 
-    drawBodys(ctx, origin, player.enemyInfo, player.health, user, t);
+    drawBodys(ctxg, origin, player, player.next.health, user, t, bg);
+
+    PrintMap(ctxm, map, player, bg, user, t);
 
 }
