@@ -6,7 +6,7 @@ module.exports = class Bullet {
 
     constructor(player) {
         this.id = crypto.randomBytes(8).toString("base64");
-        this.owner = player.self;
+        this.owner = player.id;
         this.stats = {
             size: 7,
             damage: 1,
@@ -36,6 +36,16 @@ module.exports = class Bullet {
         return {
             x: directionX / magnitude,
             y: directionY / magnitude,
+        }
+
+    }
+
+    compact(isowner) {
+
+        return {
+            x: this.position.x.toFixed(3),
+            y: this.position.y.toFixed(3),
+            isowner,
         }
 
     }

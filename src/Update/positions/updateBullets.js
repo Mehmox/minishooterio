@@ -1,8 +1,6 @@
 module.exports = function updateBullets(bullets) {
 
-    for (const bulletId in bullets) {
-
-        const bullet = bullets[bulletId];
+    Object.values(bullets).forEach(bullet => {
 
         const traveledPath = {
             x: bullet.stats.speed * bullet.plus.x,
@@ -14,6 +12,6 @@ module.exports = function updateBullets(bullets) {
 
         bullet.traveled += (Math.abs(traveledPath.x) + Math.abs(traveledPath.y));
 
-    }
+    });
 
 }

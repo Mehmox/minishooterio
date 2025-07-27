@@ -1,25 +1,24 @@
-module.exports = function updatePlayers(players,bullets) {
+module.exports = function updatePlayers(players, bullets) {
 
-    for (const selfid in players) {
+    Object.values(players).forEach(player => {
 
-        const self = players[selfid];
-        const combat = self.combat;
+        const combat = player.combat;
 
-        if (self[self.direction]) self[self.direction]();
+        if (player[player.direction]) player[player.direction]();
 
         if (combat.isShooting) {
 
             combat.AMMO_SERVER_POS = {
 
-                x: self.position.x + (combat.AMMO_CLIENT_POS.x - self.pov.width / 2),
-                y: self.position.y + (combat.AMMO_CLIENT_POS.y - self.pov.height / 2),
+                x: player.position.x + (combat.AMMO_CLIENT_POS.x - player.pov.width / 2),
+                y: player.position.y + (combat.AMMO_CLIENT_POS.y - player.pov.height / 2),
 
             }
 
-            self.fire(bullets);
+            player.fire(bullets);
 
         };
 
-    }
+    });
 
 }

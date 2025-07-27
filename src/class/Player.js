@@ -8,12 +8,12 @@ const DIAGONAL_FACTOR = Math.sqrt(2);
 
 module.exports = class Player {
 
-    constructor(FPS, ENV, Game_settings, userName) {
+    constructor(socketid, FPS, ENV, Game_settings, nick) {
 
-        this.self = crypto.randomBytes(8).toString("base64");
+        this.id = socketid;
         this.FPS = FPS;
         this.ENV = ENV;
-        this.userName = userName;
+        this.nick = nick;
 
         this.stats = { ...Game_settings.player.stats };
         this.stats.speed *= (128 / FPS);
@@ -34,25 +34,8 @@ module.exports = class Player {
 
         this.pov = Game_settings.player.pov;
 
-        this.enemieInfo = {};
+        this.enemyInfo = {};
         this.bulletInfo = {};
-
-    }
-
-    hit(damage, owner) {
-
-        this.stats.healt -= damage;
-
-        if (this.stats.healt <= 0) {
-
-            owner.KDA.kill++;
-            this.KDA.dead++;
-
-            this.setPosition();
-
-            this.stats.healt = this.baseStats.healt;
-
-        };
 
     }
 
@@ -69,6 +52,23 @@ module.exports = class Player {
             bullets[bullet.id] = bullet;
 
         }
+
+    }
+
+    hit(damage, owner) {
+
+        this.stats.health -= damage;
+
+        if (this.stats.health <= 0) {
+
+            owner.KDA.kill++;
+            this.KDA.dead++;
+
+            this.setPosition();
+
+            this.stats.health = this.baseStats.health;
+
+        };
 
     }
 
@@ -146,15 +146,22 @@ module.exports = class Player {
                     y: Math.random() * (this.mapHeight) + this.stats.size * 2,
                 }; break;
 
-            default: this.position = { x: 200, y: 200, }; break;
+            default: this.position = { x: 3000, y: 3000, }; break;
 
         }
 
     }
 
-    userName(nick) {
+    compact() {
 
-        this.KDA.userName = nick;
+        return {
+            x: this.position.x.toFixed(3),
+            y: this.position.y.toFixed(3),
+            health: this.stats.health / this.baseStats.health * 100,
+            nick: this.nick,
+            enemyInfo: this.enemyInfo,
+            bulletInfo: this.bulletInfo
+        }
 
     }
 

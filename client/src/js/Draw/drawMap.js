@@ -1,6 +1,6 @@
-//printerMap.js
+//drawMap.js
 
-export default function PrintGame(ctx, map, postion, size, pov) {
+export default function drawMap(ctx, map, { x, y }, { size, pov }) {
 
     ctx.fillStyle = "blue";
 
@@ -9,7 +9,7 @@ export default function PrintGame(ctx, map, postion, size, pov) {
     //draw client
     ctx.beginPath();
 
-    ctx.arc(postion.x, postion.y, size , 0, Math.PI * 2);
+    ctx.arc(x, y, size, 0, Math.PI * 2);
 
     ctx.fill();
     ctx.closePath();
@@ -17,8 +17,8 @@ export default function PrintGame(ctx, map, postion, size, pov) {
 
 
     const povLineStart = {
-        x: postion.x - pov.width / 2,
-        y: postion.y - pov.height / 2
+        x: x - pov.width / 2,
+        y: y - pov.height / 2
     }
 
     ctx.lineWidth = 25;

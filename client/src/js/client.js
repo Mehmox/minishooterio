@@ -1,21 +1,21 @@
 //client.js
 
-import PrintGame from "./Print/printerGame.js";
-import PrintMap from "./Print/printerMap.js";
+import PrintGame from "./Draw/drawGame.js";
+import PrintMap from "./Draw/drawMap.js";
 import Listeners from "./listeners.js";
 import Check from './class/Check.js';
-import Ses from "./test.js";
+import decoder from "./decoder.js"
+// import Ses from "./test.js";
 
 const Start = new Check();
-const fireSound = new Audio("/assets/sounds/rifle2.mp3");
-fireSound.volume = 0.05;
+// const fireSound = new Audio("/assets/sounds/rifle2.mp3");
+// fireSound.volume = 0.05;
 
 // Ses();
 
 
-let Game = {}
+let player = {}
 const user = {
-    self: null,
     events: {
         movement: {
             w: false,
@@ -33,7 +33,7 @@ const user = {
 
 }
 
-export default function client(socket, mapDiv, map, canvas, score, setLeaderBoard) {
+export default function client(socket, mapDiv, scoreDiv, map, canvas, score, ping, byte, setLeaderBoard) {
 
     canvas.style.backgroundRepeat = "no-repeat";
     map.style.backgroundRepeat = "no-repeat";
@@ -59,18 +59,18 @@ export default function client(socket, mapDiv, map, canvas, score, setLeaderBoar
 
         if (now >= combat.ShootCoolDown && combat.isShooting) {
 
-            fireSound.currentTime = 0;
+            // fireSound.currentTime = 0;
             // fireSound.play();
 
             combat.ShootCoolDown = now + 1000 / combat.fireRate;
 
         }
 
-        if (Game.players) {
+        if (player) {
 
-            PrintGame(ctxg, canvas, Game.players, user);
+            PrintGame(ctxg, canvas, player, user);
 
-            PrintMap(ctxm, map, Game.players[user.self].position, Game.players[user.self].stats.size, Game.players[user.self].pov);
+            PrintMap(ctxm, map, player, user);
 
         }
 
@@ -80,33 +80,50 @@ export default function client(socket, mapDiv, map, canvas, score, setLeaderBoar
 
     setInterval(() => {
 
-        socket.emit("movement", direction);
-
-        socket.emit("combat", { isShooting: user.events.combat.isShooting, Muzzle_Direction: user.events.combat.Muzzle_Direction });
+        socket.emit("combat", { isShooting: user.events.combat.isShooting, Muzzle_Direction: user.events.combat.Muzzle_Direction, direction});
 
     }, 1000 / 20);
 
+    setInterval(() => {
+
+        const now = performance.now();
+
+        socket.emit("ping", () => {
+
+            const end = performance.now();
+
+            ping.innerHTML = `Ping: ${((end - now) / 2).toFixed(0)}`;
+
+        });
+
+    }, 400);
+
     Start.set(Update);
 
-    socket.on("login", (data) => {
+    socket.on("login", ({ id, settings, ENV,nick }) => {
 
-        user.self = data.id;
-        user.pov = data.game.player.pov;
-        user.events.combat.fireRate = data.game.fireRate;
+        user.id = id;
+        user.nick = nick;
+        user.bulletsize = settings.player.combat.size;
+        user.size = settings.player.stats.size;
+        user.pov = settings.player.pov;
+        user.events.combat.fireRate = settings.fireRate;
         user.events.combat.Muzzle_Direction = { x: user.pov.width, y: user.pov.height / 2 };
 
 
         mapDiv.style.width = user.pov.width / 2 + "px";
         mapDiv.style.height = user.pov.height + "px";
+        scoreDiv.style.width = user.pov.width / 2 + "px";
+        scoreDiv.style.height = user.pov.height + "px";
 
-        map.width = data.game.width;
-        map.height = data.game.height;
+        map.width = settings.width;
+        map.height = settings.height;
 
 
         canvas.width = user.pov.width;
         canvas.height = user.pov.height;
-        canvas.style.backgroundImage = `url("/assets/images/Map${data.ENV !== "production" ? 1 : data.game.mapId}.png")`;
-        canvas.style.backgroundSize = `${data.game.width + user.pov.width}px ${data.game.height + user.pov.height}px`;
+        canvas.style.backgroundImage = `url("/assets/images/Map${ENV !== "production" ? 1 : settings.mapId}.png")`;
+        canvas.style.backgroundSize = `${settings.width + user.pov.width}px ${settings.height + user.pov.height}px`;
 
 
         score.style.width = user.pov.width / 2 + "px";
@@ -116,16 +133,18 @@ export default function client(socket, mapDiv, map, canvas, score, setLeaderBoar
 
     });
 
-    socket.on("update", (game_data) => {
+    socket.on("tick", (game_data) => {
 
-        Game = game_data;
+        byte.innerHTML = `Bytes: ${game_data.byteLength}`
 
-        if (Game.leaderboard) setLeaderBoard(Game.leaderboard);
+        player = decoder(game_data);
+
+        // if (player.leaderboard) setLeaderBoard(player.leaderboard);
 
         Start.check(2);
 
     });
 
-    Listeners(user);
+    Listeners(user, socket);
 
 }

@@ -3,7 +3,7 @@
     "height": 4000,
     "player": {
         "stats": {
-            "healt": 3,
+            "health": 3,
             "size": 20,
             "speed": 2
         },
@@ -13,7 +13,8 @@
         },
         "combat": {
             "isShooting": false,
-            "fireRate": 4,
+            "fireRate": 3,
+            "size": 7,
             "AMMO_CLIENT_POS": null,
             "AMMO_SERVER_POS": null,
             "cooldown": 0

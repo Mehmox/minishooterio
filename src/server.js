@@ -11,7 +11,7 @@ const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV;
-const FPS = 60;
+const FPS = 128;
 Game_settings.mapId = Math.floor(Math.random() * 3) + 1;
 
 const app = express();
@@ -36,9 +36,10 @@ if (ENV !== "development") {
 
 
 const Game = {
-    leaderboard: [],
     players: {},
-    bullets: {}
+    bullets: {},
+    KDA: [],
+    leaderboard: [],
 }
 
 // io.use((socket, next) => {
@@ -48,7 +49,6 @@ const Game = {
 //     next();
 
 // });
-
 
 const RATE_LIMIT = 20; // saniyede max 20 mesaj
 const INTERVAL = 1000; // 1 saniye
@@ -60,7 +60,7 @@ io.on("connect", (socket) => {
     // socket.use(() => {
     //     socket._rateLimit.count++;
     //     if (socket._rateLimit.count > RATE_LIMIT) {
-    //         console.log(`Socket ${player.self} is reached the rate limited.`);
+    //         console.log(`Socket ${player.id} is reached the rate limited.`);
     //         socket.disconnect();
     //     }
     // });
@@ -70,60 +70,53 @@ io.on("connect", (socket) => {
     //     socket._rateLimit.lastCheck = Date.now();
     // }, INTERVAL);
 
-    
-    const player = new Player(FPS, ENV, Game_settings, nick);
-    
-    Game.players[player.self] = player;
+    const user = new Player(socket.id, FPS, ENV, Game_settings, nick);
 
-    console.log(`id: ${player.self} joined.`);
+    Game.players[user.id] = user;
 
-    Game.leaderboard.push({ KDA: Game.players[player.self].KDA, nick: Game.players[player.self].userName, id: Game.players[player.self].self });
+    console.log(`"${user.userName}"[#${user.id}] joined.`);
+    console.log(`\n${Object.keys(Game.players).length} player online!`);
 
-    socket.emit("login", { id: player.self, game: Game_settings, ENV });
+    socket.emit("login", { id: socket.id, settings: Game_settings, ENV, nick: user.nick });
 
-    socket.on("movement", (direction) => Game.players[player.self].direction = direction);
+    Game.KDA[user.id] = { KDA: Game.players[user.id].KDA, nick: Game.players[user.id].userName };
 
+    socket.on("ping", (res) => {
 
-    const self = Game.players[player.self];
-
-    socket.on("combat", (combat) => {
-
-        self.combat = {
-            ...self.combat,
-            isShooting: combat.isShooting,
-            AMMO_CLIENT_POS: combat.Muzzle_Direction
-        }
+        if (typeof (res) === "function") res();
 
     });
 
+    socket.on("combat", ({ isShooting, Muzzle_Direction, direction }) => {
+
+        user.combat = {
+            ...user.combat,
+            isShooting,
+            AMMO_CLIENT_POS: Muzzle_Direction
+        }
+
+        Game.players[user.id].direction = direction;
+
+    });
 
     socket.on("disconnect", () => {
 
-        delete Game.players[player.self];
+        delete Game.players[user.id];
+        delete Game.KDA[user.id];
 
-        for (let i = 0; i < Game.leaderboard.length; i++) {
+        Object.values(Game.bullets).forEach(bullet => {
 
-            const player = Game.leaderboard[i];
+            if (bullet.owner === user.id) delete Game.bullets[bullet.id];
 
-            if (player.self === player.self) Game.leaderboard.splice(i, 1);
+        });
 
-        }
-
-        for (const bulletId in Game.bullets) {
-
-            const bullet = Game.bullets[bulletId];
-
-            if (bullet.owner === player.self) delete Game.bullets[bulletId];
-
-        }
-
-        console.log(`id: ${player.self} disconnected.`);
+        console.log(`"${user.userName}"[#${user.id}] disconnected.`);
+        console.log(`\n${Object.keys(Game.players).length} player online!`);
 
     });
 
 });
 
-
 GameLoop(FPS, io, Game);
 
-server.listen(PORT, () => console.log(`Lisstening on Port: ${PORT}!`));
+server.listen(PORT, () => console.log(`listening on port: ${PORT}`));
