@@ -1,4 +1,7 @@
-/* css.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
     margin: 0;
 }
@@ -15,7 +18,7 @@ canvas {
     background-color: white;
 }
 
-div {
+#root div {
     width: 100px;
     height: 100px;
 }

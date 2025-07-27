@@ -1,9 +1,9 @@
-//printer.js
+//printerGame.js
 
 import SetBullet from "./bullets.js";
 import SetEnemies from "./enemies.js";
 
-export default function Print(ctx, canvas, players, client) {
+export default function PrintGame(ctx, canvas, players, client) {
 
     const self = players[client.self];
 

@@ -1,9 +1,22 @@
 {
-    "width": 4000,
-    "height": 4000,
-    "pov": {
-        "width": 800,
-        "height": 800
-    },
-    "fireRate": 4
+    "width": 2500,
+    "height": 2500,
+    "player": {
+        "stats": {
+            "healt": 3,
+            "size": 20,
+            "speed": 2
+        },
+        "pov": {
+            "width": 800,
+            "height": 800
+        },
+        "combat": {
+            "isShooting": false,
+            "fireRate": 4,
+            "AMMO_CLIENT_POS": null,
+            "AMMO_SERVER_POS": null,
+            "cooldown": 0
+        }
+    }
 }

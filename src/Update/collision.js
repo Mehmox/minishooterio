@@ -1,12 +1,12 @@
 //collision.js
 
-module.exports = function is_collision(Object1, Object2) {
+module.exports = function is_collision(Player, Bullet) {
 
-    if (Object1.self !== Object2.owner) {
+    if (Player.self !== Bullet.owner) {
 
-        const dist = Math.hypot(Object2.position.x - Object1.position.x, Object2.position.y - Object1.position.y);
+        const distance = Math.hypot(Bullet.position.x - Player.position.x, Bullet.position.y - Player.position.y);
 
-        if (dist <= Object1.stats.size + Object2.stats.size) {
+        if (distance <= Player.stats.size + Bullet.stats.size) {
 
             return true;
 

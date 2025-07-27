@@ -4,25 +4,25 @@ const crypto = require("crypto");
 
 module.exports = class Bullet {
 
-    constructor(player, target) {
+    constructor(player) {
         this.id = crypto.randomUUID();
         this.owner = player.self;
         this.stats = {
-            size: 25,
+            size: 7,
             damage: 1,
-            speed: 1,
+            speed: 4 * (128 / player.FPS),
         }
         this.distance = player.pov.width * 1.5;
         this.traveled = 0;
         this.position = { ...player.position };
-        this.plus = this.normalize(target);
+        this.plus = this.normalize(player.combat.AMMO_SERVER_POS);
         this.end = {
             x: this.position.x + this.plus.x,
             y: this.position.y + this.plus.y
         }
 
         this.playerSize = player.stats.size;
-        this.history = [];
+        this.history = new Set();
 
     }
 

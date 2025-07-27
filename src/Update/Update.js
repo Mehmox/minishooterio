@@ -1,79 +1,96 @@
 //Update.js
-let counter = 0;
-const SetEnemies = require("./enemies");
-const SetBullets = require("./bullets");
+
+const eff = require("../class/Efficiency");
+
+const updateBullets = require("./positions/updateBullets");
+const updatePlayers = require("./positions/updatePlayers");
+const SetEnemies = require("./Pov/enemies");
+const SetBullets = require("./Pov/bullets");
 const is_collision = require("./collision");
-const leechAsync = require("../leechAsync")
+// const { leech, leechAsync } = require("../leechAsync");
 
-module.exports = function Update(io, Game) {
-    counter++;
-    // console.time("UpdateTick");
+const Efficiency = new eff({ log_Mode: "linear" });
 
-    // performance.mark("update Start");
+module.exports = function GameLoop(Tick, io, Game) {
 
-    const bullets = Game.bullets;
+    const ms = 1000 / Tick;
+    let GameTick = 0;
+    let Last_Update_Time = performance.now();
 
-    for (const selfid in Game.players) {
+    function Update() {
 
-        const self = Game.players[selfid];
+        const now = performance.now();
 
-        const directions = {
-            up: 'Up',
-            down: 'Down',
-            right: 'Right',
-            left: 'Left',
-            upright: 'UpRight',
-            upleft: 'UpLeft',
-            rightdown: 'RightDown',
-            downleft: 'DownLeft'
-        };
-        if (directions[self.direction]) self[directions[self.direction]]();
+        if (now - Last_Update_Time >= ms) {
 
-        SetBullets(self, bullets);
+            Efficiency.now();
 
-        SetEnemies(self, Game.players, selfid);
+            GameTick++;
 
-    }
+            const bullets = Game.bullets;
+            const players = Game.players;
 
-    for (const bulletId in bullets) {
+            //bullet position update
+            updateBullets(bullets);
+            //player position update
+            updatePlayers(players, bullets);
+            //player pov object update (enemies/bullets)
+            for (const selfid in players) {
 
-        const bullet = bullets[bulletId];
+                const self = players[selfid];
 
-        for (const playerId in Game.players) {
+                SetBullets(self, bullets);
 
-            const player = Game.players[playerId];
+                SetEnemies(self, players);
 
-            if (!bullet.history.includes(playerId) && is_collision(player, bullet)) {
+            }
+            //player collision update
+            for (const bulletId in bullets) {
 
-                // bullet.history.push(playerId);
+                const bullet = bullets[bulletId];
 
-                player.hit(bullet.stats.damage, Game.players[bullet.owner]);
+                for (const playerId in Game.players) {
+
+                    const player = Game.players[playerId];
+
+                    if (!bullet.history.has(playerId) && is_collision(player, bullet)) {
+
+                        bullet.history.add(playerId);
+
+                        player.hit(bullet.stats.damage, Game.players[bullet.owner]);
+
+                    }
+
+                }
+
+            }
+            //update leaderBoard
+            Game.leaderboard.sort((a, b) => (b.KDA.kill + b.KDA.assist / 2) - (a.KDA.kill + a.KDA.assist / 2));
+            //send updated game data to all clients
+
+            if (GameTick % Tick === 0) {
+
+                io.emit("update", Game);
+
+            } else {
+
+                io.emit("update", {
+                    players: Game.players,
+                    bullets: Game.bullets
+                });
 
             }
 
+            Last_Update_Time = now;
+
+            Efficiency.now();
+
         }
+
+        setImmediate(() => Update());
 
     }
 
-    Game.leaderboard.sort((a, b) => (b.KDA.kill + b.KDA.assist / 2) - (a.KDA.kill + a.KDA.assist / 2));
-
-    io.emit("update", Game);
-
-    // performance.mark("update End");
-    // performance.measure("result", "update Start", "update End");
-
-    // var leech = 0;
-    // for (let j = 0; j < 100000000; j++) {
-    //     leech++;
-    // } 
-
-    // console.timeEnd("UpdateTick");
+    Update();
 
 }
-// setInterval(() => {
-//     console.log(performance.getEntries())
-//     performance.clearMarks();
-//     performance.clearMeasures();
-// }, 1000);
-
-setInterval(() => console.log(counter, counter % 60), 1000);

@@ -6,65 +6,34 @@ const DIAGONAL_FACTOR = Math.sqrt(2);
 
 module.exports = class Player {
 
-    constructor(self, ENV, Game_settings, test) {
-        this.ENV = ENV;
-        this.self = self;
-        this.userName = test;
-        this.stats = {
-            healt: 1,
-            size: 20,
-            speed: 5,
-        }
-        this.baseStats = this.stats;
-        this.KDA = {
-            kill: 0,
-            dead: 0,
-            assist: 0,
-        }
-        switch (ENV) {
-            case "pro":
-                this.position = {
-                    x: Math.random() * (Game_settings.width - this.stats.size) + this.stats.size,
-                    y: Math.random() * (Game_settings.height - this.stats.size) + this.stats.size,
-                }
-                break;
-            case "dev":
-            case "test":
-                this.position = {
-                    x: 400,
-                    y: 400,
-                }
-                break;
-        }
+    constructor(self, FPS, ENV, Game_settings, userName) {
 
-        this.pov = {
-            width: Game_settings.pov.width,
-            height: Game_settings.pov.height
-        }
-        this.direction = "";
+        this.self = self;
+        this.FPS = FPS;
+        this.ENV = ENV;
+        this.userName = userName;
+
+        this.stats = { ...Game_settings.player.stats };
+        this.stats.speed *= (128 / FPS);
+
+        this.baseStats = { ...this.stats };
+        this.baseStats.speed *= (128 / FPS);
+
+        this.combat = Game_settings.player.combat;
+
+        this.KDA = { kill: 0, dead: 0, assist: 0, }
 
         this.mapWidth = Game_settings.width;
         this.mapHeight = Game_settings.height;
 
+        this.setPosition();
+        this.movementUnit = this.stats.speed / DIAGONAL_FACTOR;
+        this.direction = "";
 
-        this.fireRate = 4;
-        this.cooldown = 0;
+        this.pov = Game_settings.player.pov;
 
         this.enemieInfo = {};
         this.bulletInfo = {};
-
-    }
-
-    fire(bullets, target) {
-
-        if (Date.now() >= this.cooldown) {
-
-            this.cooldown = Date.now() + 1000 / this.fireRate;
-
-            const bullet = new Bullet(this, target);
-            bullets[bullet.id] = bullet;
-
-        }
 
     }
 
@@ -72,95 +41,112 @@ module.exports = class Player {
 
         this.stats.healt -= damage;
 
-        if (this.stats.healt <= 0) this.dead(owner);
+        if (this.stats.healt <= 0) {
+
+            owner.KDA.kill++;
+            this.KDA.dead++;
+
+            this.setPosition();
+
+            this.stats.healt = this.baseStats.healt;
+
+        };
 
     }
 
-    dead(owner) {
+    fire(bullets) {
 
-        owner.KDA.kill++;
-        this.KDA.dead++;
+        const now = performance.now()
 
-        switch (this.ENV) {
-            case "pro":
-                this.position = {
-                    x: Math.random() * (this.mapWidth - this.stats.size) + this.stats.size,
-                    y: Math.random() * (this.mapHeight - this.stats.size) + this.stats.size,
-                }
-                break;
-            case "dev":
-            case "test":
-                this.position = {
-                    x: 400,
-                    y: 400,
-                }
-                break;
+        if (now >= this.combat.cooldown) {
+
+            this.combat.cooldown = now + 1000 / this.combat.fireRate;
+
+            const bullet = new Bullet(this);
+
+            bullets[bullet.id] = bullet;
+
         }
-
-        this.stats.healt = this.baseStats.healt;
 
     }
 
     Up() {
 
-        if (this.position.y - this.stats.speed > this.stats.size)
+        if (this.position.y - this.stats.speed > 0)
             this.position.y -= this.stats.speed;
+
+    }
+    Right() {
+
+        if (this.position.x + this.stats.speed < this.mapWidth)
+            this.position.x += this.stats.speed;
 
     }
     Down() {
 
-        if (this.position.y + this.stats.speed < this.mapHeight - this.stats.size * 2)
+        if (this.position.y + this.stats.speed < this.mapHeight)
             this.position.y += this.stats.speed;
 
     }
     Left() {
 
-        if (this.position.x - this.stats.speed > this.stats.size)
+        if (this.position.x - this.stats.speed > 0)
             this.position.x -= this.stats.speed;
-
-    }
-    Right() {
-
-        if (this.position.x + this.stats.speed < this.mapWidth - this.stats.size * 2)
-            this.position.x += this.stats.speed;
 
     }
 
     UpRight() {
 
-        if (this.position.y - this.stats.speed > this.stats.size)
-            this.position.y -= this.stats.speed / DIAGONAL_FACTOR;
+        if (this.position.y - this.movementUnit > 0)
+            this.position.y -= this.movementUnit;
 
-        if (this.position.x + this.stats.speed < this.mapWidth - this.stats.size * 2)
-            this.position.x += this.stats.speed / DIAGONAL_FACTOR;
-
-    }
-    RightDown() {
-
-        if (this.position.x + this.stats.speed < this.mapWidth - this.stats.size * 2)
-            this.position.x += this.stats.speed / DIAGONAL_FACTOR;
-
-        if (this.position.y + this.stats.speed < this.mapHeight - this.stats.size * 2)
-            this.position.y += this.stats.speed / DIAGONAL_FACTOR;
-
-    }
-
-    DownLeft() {
-
-        if (this.position.y + this.stats.speed < this.mapHeight - this.stats.size * 2)
-            this.position.y += this.stats.speed / DIAGONAL_FACTOR;
-
-        if (this.position.x - this.stats.speed > this.stats.size)
-            this.position.x -= this.stats.speed / DIAGONAL_FACTOR;
+        if (this.position.x + this.movementUnit < this.mapWidth)
+            this.position.x += this.movementUnit;
 
     }
     UpLeft() {
 
-        if (this.position.y - this.stats.speed > this.stats.size)
-            this.position.y -= this.stats.speed / DIAGONAL_FACTOR;
+        if (this.position.y - this.movementUnit > 0)
+            this.position.y -= this.movementUnit;
 
-        if (this.position.x - this.stats.speed > this.stats.size)
-            this.position.x -= this.stats.speed / DIAGONAL_FACTOR;
+        if (this.position.x - this.movementUnit > 0)
+            this.position.x -= this.movementUnit;
+
+    }
+
+    RightDown() {
+
+        if (this.position.x + this.movementUnit < this.mapWidth)
+            this.position.x += this.movementUnit;
+
+        if (this.position.y + this.movementUnit < this.mapHeight)
+            this.position.y += this.movementUnit;
+
+    }
+    DownLeft() {
+
+        if (this.position.y + this.movementUnit < this.mapHeight)
+            this.position.y += this.movementUnit;
+
+        if (this.position.x - this.movementUnit > 0)
+            this.position.x -= this.movementUnit;
+
+    }
+
+    setPosition() {
+
+        switch (this.ENV) {
+
+            case "production":
+            case "test":
+                this.position = {
+                    x: Math.random() * (this.mapWidth) + this.stats.size * 2,
+                    y: Math.random() * (this.mapHeight) + this.stats.size * 2,
+                }; break;
+
+            default: this.position = { x: 200, y: 200, }; break;
+
+        }
 
     }
 

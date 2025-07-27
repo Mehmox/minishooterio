@@ -1,5 +1,5 @@
-module.exports = function leechAsync(iterations, chunkSize = 10000) {
-    
+function leechAsync(iterations, chunkSize = 10000) {
+
     return new Promise((resolve) => {
 
         let leech = 0;
@@ -11,7 +11,7 @@ module.exports = function leechAsync(iterations, chunkSize = 10000) {
             const end = Math.min(j + chunkSize, iterations);
 
             while (j < end) {
-                
+
                 leech++;
 
                 j++;
@@ -33,3 +33,17 @@ module.exports = function leechAsync(iterations, chunkSize = 10000) {
 
     });
 }
+
+function leech(leech = 100000000) {
+    
+    var counter = 0;
+
+    for (let j = 0; j < leech; j++) {
+
+        counter++;
+
+    }
+
+}
+
+module.exports = { leech, leechAsync };
