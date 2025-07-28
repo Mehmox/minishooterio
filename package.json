@@ -1,0 +1,33 @@
+{
+  "name": "mini_shooter_io",
+  "version": "0.0.12",
+  "description": "my first 2D game try!",
+  "author": "Mehmox",
+  "license": "Proprietary",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mehmox/minishooterio.git"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "ii": "npm i && npm i --prefix client && npm i --prefix server",
+    "r": "rimraf node_modules server/node_modules client/node_modules",
+    "dev": "concurrently \"cross-env REACT_APP_ENV=development npm run start --prefix client\" \"cross-env NODE_ENV=development PORT=3001 npm run dev --prefix server\" ",
+    "build": "cross-env REACT_APP_ENV=production npm run build --prefix client && cpy \"client/build/**\" \"build/\" --overwrite && rimraf client/build",
+    "test": "cross-env NODE_ENV=test PORT=3000 npm run dev --prefix server",
+    "i": "npm i && npm i --prefix server",
+    "start": "cross-env NODE_ENV=production PORT=3000 npm run start --prefix server"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "cpy": "^11.1.0",
+    "rimraf": "^6.0.1"
+  }
+}

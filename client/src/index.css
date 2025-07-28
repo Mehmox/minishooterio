@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    user-select: none;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: grey;
+}
+
+canvas {
+    background-color: white;
+}
+
+.inputs {
+    @apply w-input h-16 pb-3 pl-5 text-5xl rounded-[16px]
+}
