@@ -31,16 +31,16 @@ module.exports = function updateAOI(players, bullets) {
 
     players.forEach(player => {
 
-        bullets.forEach(bullet => {
-
-            CantFindName(player, bullet, "bulletInfo");
-
-        });
-
         players.forEach(enemie => {
             if (player.id === enemie.id) return;
 
             CantFindName(player, enemie, "enemyInfo");
+
+        });
+
+        bullets.forEach(bullet => {
+
+            CantFindName(player, bullet, "bulletInfo");
 
         });
 

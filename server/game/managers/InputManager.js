@@ -18,8 +18,10 @@ module.exports = class InputManager {
 
             respawn(player);
 
-            // markDirty(player.id, "login", true);
-            markDirty(player.id, "x", 3000);
+            markDirty(player.id, "nick", player.nick);
+            markDirty(player.id, "health", player.health);
+            markDirty(player.id, "x", player.x);
+            markDirty(player.id, "y", player.y);
 
             GameState.players.set(player.id, player);
 

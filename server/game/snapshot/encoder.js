@@ -1,4 +1,6 @@
 //encoder.js
+const { write_schema } = require("../../../client/src/shared/BufferShema");
+
 function Event(event) {
     switch (event) {
         case "add": return 0;
@@ -7,7 +9,45 @@ function Event(event) {
     }
 }
 
-module.exports = function encoder(targets, deltaBufferSizes, Dirty, write_schema) {
+function writeToBuffer(buffer, schema_key, value, offset) {
+
+    const schema = write_schema[schema_key];
+
+    const writeMethod = schema.writeMethod;
+    console.log(schema_key, value, offset)
+    return offset + buffer[writeMethod](value, offset);
+
+}
+
+function writeInVision(deltaSnapshot, data, offset) {
+
+    offset += deltaSnapshot.writeUint8(data.length, offset);//total inVision player num
+
+    data.forEach(entity => {
+
+        const entity_id = entity.value;
+
+        offset += deltaSnapshot[writeMethod](entity_id, offset);//inVision player id;
+
+        const event_id = Event(entity.event);
+
+        offset += deltaSnapshot.writeUint8(event_id, offset);//properys changed value
+
+    });
+
+    return offset;
+
+}
+
+function writeNick(deltaSnapshot, data, offset) {
+
+    const nick_length = deltaSnapshot.write(data, offset + 1, "utf8");
+
+    return offset + nick_length + deltaSnapshot.writeUint8(nick_length, offset);;
+
+}
+
+module.exports = function encoder(targets, deltaBufferSizes, Dirty) {
 
     let deltaSnapshots = {};
 
@@ -15,82 +55,39 @@ module.exports = function encoder(targets, deltaBufferSizes, Dirty, write_schema
 
         const list = targets[target];
 
-        list.forEach(instance_id => {
+        const deltaSnapshot = Buffer.alloc(deltaBufferSizes[target]);
 
-            const deltaSnapshot = Buffer.alloc(deltaBufferSizes[target]);
+        let offset = 0;
 
-            let offset = 0;
+        list.forEach((instance_id, index) => {
 
             const player_patch = Dirty.get(instance_id);
-            
-            deltaSnapshot.writeUint16LE(instance_id, offset);//verisi değişen entitynin idsi
 
-            offset += 2;
+            offset = writeToBuffer(deltaSnapshot, "instance_id", instance_id, offset);
 
-            deltaSnapshot.writeUint16LE(Object.keys(player_patch).length, offset);//verisi değişen entitynin değişen veri sayısı
+            let changed_offset = offset;
+            let changed_num = 0;
 
-            offset += 2;
+            offset = offset + write_schema["instance_changed_num"].size;
 
-            for (const variable_key in player_patch) {
+            for (const state in player_patch) {
+                if (index > 0 && (state === "inVision" || state === "nick")) return;
 
-                const data = player_patch[variable_key];
+                const data = player_patch[state];
 
-                const schema = write_schema[variable_key];
-                const id = schema.id;
-                const writeMethod = schema.writeMethod;
+                offset = writeToBuffer(deltaSnapshot, "property_schema_id", write_schema[state].id, offset);
 
-                deltaSnapshot.writeUint8(id, offset);//changed data id
-
-                offset++;
-
-                switch (variable_key) {
-                    case "inVision":
-
-                        deltaSnapshot.writeUint8(data.length, offset);//total inVision player num
-
-                        offset += 1;
-
-                        data.forEach(entity => {
-
-                            const entity_id = entity.value;
-
-                            deltaSnapshot[writeMethod](entity_id, offset);//inVision player id
-
-                            offset += 2;
-
-                            const event_id = Event(entity.event);
-
-                            deltaSnapshot.writeUint8(event_id, offset);//properys changed value
-
-                            offset += 1;
-
-                        }); break;
-
-                    case "nick":
-
-                        const nick_length = deltaSnapshot.write(data, offset + 1, "utf8");
-
-                        deltaSnapshot.writeUint8(nick_length, offset);
-
-                        offset += 1 + nick_length;
-
-                        break;
-
-                    default:
-
-                        try {
-                            deltaSnapshot[writeMethod](data, offset);//properys changed value
-                        } catch (error) {
-                            console.log(variable_key)
-                            console.log(error.message)
-                        }
-
-                        offset += schema.size;
-
-                        break;
+                switch (state) {
+                    case "inVision": offset = writeInVision(deltaSnapshot, data, offset); break;
+                    case "nick": offset = writeNick(deltaSnapshot, data, offset); break;
+                    default: offset = writeToBuffer(deltaSnapshot, state, data, offset); break;
                 }
 
+                changed_num++;
+
             }
+
+            writeToBuffer(deltaSnapshot, "instance_changed_num", changed_num, changed_offset);
 
             deltaSnapshots[target] = deltaSnapshot;
 

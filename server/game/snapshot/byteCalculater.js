@@ -1,5 +1,11 @@
 //byteCalculater.js
-module.exports = function ByteCalculater(targets, Dirty, schema) {
+const { write_schema } = require("../../../client/src/shared/BufferShema");
+
+const instance_id_byte = write_schema["instance_id"].size;
+const instance_changed_num_byte = write_schema["instance_changed_num"].size;
+const property_schema_id_byte = write_schema["property_schema_id"].size;
+
+module.exports = function ByteCalculater(targets, Dirty) {
 
     let deltaBufferSizes = {};
 
@@ -9,28 +15,27 @@ module.exports = function ByteCalculater(targets, Dirty, schema) {
 
         const list = targets[socket_id];
 
-        list.forEach((instance_id) => {
+        list.forEach((instance_id, index) => {
 
             const player = Dirty.get(instance_id);
 
-            deltaBufferSize += 2;//instance_id size 2 byte
+            deltaBufferSize += instance_id_byte;
 
-            deltaBufferSize += 2;//instance_id changed property num 2 byte
+            deltaBufferSize += instance_changed_num_byte;
 
-            for (const property in player) {
+            for (const state in player) {
+                if (index > 0 && (state === "inVision" || state === "nick")) return;
 
-                const size = schema[property].dynamic ? 0 : schema[property].size;
+                deltaBufferSize += property_schema_id_byte;
 
-                deltaBufferSize += 1;//property shema id 1 byte
-
-                switch (property) {
+                switch (state) {
                     case "inVision":
 
                         deltaBufferSize += 1;//total inVision entity num
 
-                        deltaBufferSize += player[property].length * 2;//inVision entity ids
+                        deltaBufferSize += player[state].length * 2;//inVision entity ids
 
-                        deltaBufferSize += player[property].length;//relation entity event id
+                        deltaBufferSize += player[state].length;//relation entity event id
 
                         break;
 
@@ -38,13 +43,15 @@ module.exports = function ByteCalculater(targets, Dirty, schema) {
 
                         deltaBufferSize += 1;//nick length
 
-                        deltaBufferSize += Buffer.byteLength(player[property], "utf8");
+                        deltaBufferSize += Buffer.byteLength(player[state], "utf8");
 
                         break;
 
                     default:
 
-                        deltaBufferSize += size;//property value bytes
+                        const dataSize = write_schema[state].dynamic ? 0 : write_schema[state].size;
+
+                        deltaBufferSize += dataSize;//state value bytes
 
                         break;
                 }

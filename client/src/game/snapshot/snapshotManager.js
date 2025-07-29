@@ -3,16 +3,11 @@ import applyDelta from "./applyDelta";
 
 class SnapshotManager {
 
-    update(snapshot) {
-        // return
+    update(next, snapshot) {
+
         const Delta = decoder(snapshot);
 
-        for (const porperty in Delta[0]) {
-            console.log(`"${porperty}": `, Delta[0][porperty])
-        }
-        console.log("\n")
-        return;
-        // applyDelta(Delta,)
+        applyDelta(Delta, next)
 
     }
 

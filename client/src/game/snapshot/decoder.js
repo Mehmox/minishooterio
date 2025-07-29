@@ -90,7 +90,7 @@ export default function decoder(snapshot) {
 
     }
 
-    return Gamestate;
+    return Gamestate
 
 }
 

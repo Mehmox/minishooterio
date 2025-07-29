@@ -35,7 +35,7 @@ module.exports = function tickloop(GameState, Pool, ms, snapshotms, SnapshotMana
             //player position update
             safeExecute("movePlayers", () => movePlayers(players));
             //generate bullet update
-            safeExecute("fire", () => fire(GameState, Pool, players, now));
+            // safeExecute("fire", () => fire(GameState, Pool, players, now));
             //player/bullet collision update
             safeExecute("damage", () => damage(bullets, players));
             //update leaderBoard
@@ -46,10 +46,10 @@ module.exports = function tickloop(GameState, Pool, ms, snapshotms, SnapshotMana
 
             // Efficiency.check();
 
-            // if (GameState.players.size > 0)
-            // setImmediate(Update);
-            // else
-            setTimeout(Update, 1000);
+            if (GameState.players.size > 0)
+                setImmediate(Update);
+            else
+                setTimeout(Update, 1000);
 
 
         } else setImmediate(Update);

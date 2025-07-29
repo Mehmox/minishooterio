@@ -14,6 +14,8 @@ module.exports = function Move(bullets, now, players) {
 
             bullet.x += bullet.plusX;
             bullet.y += bullet.plusY;
+            markDirty(bullet.id, "x", bullet.x);
+            markDirty(bullet.id, "y", bullet.y);
 
         }
 

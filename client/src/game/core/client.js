@@ -37,9 +37,9 @@ export default function client(
     data.net.current.style.color = options[0].value ? "White" : "Black";
 
     Start.set(() => Tick(system, user, ctxg, ctxm, Gamestate, map, options, canvas));
-    
+
     const inputInterval = Inputs(socket, user);
-    
+
     const pingInterval = Ping(socket, data);
 
     socket.once("login", ({ delta, id, settings, nick, maxPlayer }) => {
@@ -71,7 +71,7 @@ export default function client(
 
         if (Gamestate.next) Gamestate.update();
 
-        snapshotManager.update(snapshot, Gamestate.next)
+        snapshotManager.update(Gamestate.next, snapshot)
 
         data.net.current.innerText = `Packets: ${snapshot.byteLength} bytes`;
 
