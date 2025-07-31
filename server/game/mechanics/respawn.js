@@ -12,8 +12,8 @@ module.exports = function Respawn(player) {
 
         case "test":
         default:
-            player.x = 3000;
-            player.y = 3000;
+            player.x = 100;
+            player.y = 100;
             break;
 
     }

@@ -6,9 +6,7 @@ module.exports = function fire(GameState, Pool, players, now) {
 
             player.cooldown = now + 1000 / player.fireRate;
 
-            const bullet = Pool.acquireBullet();
-
-            bullet.setOwner(player.id, player.x, player.y, player.Muzzle_SERVER_X, player.Muzzle_SERVER_Y);
+            const bullet = Pool.acquireBullet(player.id, player.x, player.y, player.Muzzle_SERVER_X, player.Muzzle_SERVER_Y);
 
             GameState.bullets.set(bullet.id, bullet);
 

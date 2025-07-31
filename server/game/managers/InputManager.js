@@ -13,8 +13,7 @@ module.exports = class InputManager {
 
             if (nick === "undefined") nick = "";
 
-            const player = Pool.acquirePlayer();
-            player.setNick(nick, socket.id);
+            const player = Pool.acquirePlayer(nick, socket.id);
 
             respawn(player);
 
@@ -50,7 +49,13 @@ module.exports = class InputManager {
 
                 GameState.players.delete(player.id);
 
-                Pool.release(player)
+                // GameState.bullets
+                //     .filter(bullet => bullet.owner === player.id)
+                //     .forEach(bullet => {
+                //         GameState.bullets.delete(bullet.id);
+                //     });
+
+                Pool.release(player);
 
                 player.clear();
 

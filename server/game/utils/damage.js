@@ -20,7 +20,7 @@ module.exports = function Damage(bullets, players) {
 
                     respawn(player);
 
-                    player.health = player.maxhealth;
+                    player.dead();
 
                 };
 

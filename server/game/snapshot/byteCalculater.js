@@ -15,7 +15,7 @@ module.exports = function ByteCalculater(targets, Dirty) {
 
         const list = targets[socket_id];
 
-        list.forEach((instance_id, index) => {
+        list.forEach(instance_id => {
 
             const player = Dirty.get(instance_id);
 
@@ -24,7 +24,6 @@ module.exports = function ByteCalculater(targets, Dirty) {
             deltaBufferSize += instance_changed_num_byte;
 
             for (const state in player) {
-                if (index > 0 && (state === "inVision" || state === "nick")) return;
 
                 deltaBufferSize += property_schema_id_byte;
 

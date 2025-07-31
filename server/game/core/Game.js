@@ -5,8 +5,8 @@ const tickloop = require("./Tick");
 
 const maxPlayer = 32;
 
-const Tick = 128;
-const snapshotHz = 64;
+const Tick = 5;
+const snapshotHz = Tick / 2;
 
 const GameState = {
     players: new Map(),

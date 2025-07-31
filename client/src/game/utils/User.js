@@ -1,4 +1,4 @@
-export default class User {
+class User {
 
     constructor() {
         this.pov = { width: 1920, height: 925 };
@@ -17,5 +17,9 @@ export default class User {
         this.combat.Muzzle_Direction = { x: window.innerWidth, y: window.innerHeight / 2 }
         this.combat.angle = null;
     }
-    
+
 }
+
+const user = new User();
+
+export default user;

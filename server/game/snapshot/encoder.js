@@ -14,24 +14,26 @@ function writeToBuffer(buffer, schema_key, value, offset) {
     const schema = write_schema[schema_key];
 
     const writeMethod = schema.writeMethod;
-    console.log(schema_key, value, offset)
-    return offset + buffer[writeMethod](value, offset);
+
+    return buffer[writeMethod](value, offset);
 
 }
 
-function writeInVision(deltaSnapshot, data, offset) {
+function writeInVision(buffer, data, offset) {
 
-    offset += deltaSnapshot.writeUint8(data.length, offset);//total inVision player num
+    offset = buffer.writeUint8(data.length, offset);//total inVision player num
+
+    const writeMethod = write_schema["inVision"].writeMethod;
 
     data.forEach(entity => {
 
         const entity_id = entity.value;
 
-        offset += deltaSnapshot[writeMethod](entity_id, offset);//inVision player id;
+        offset = buffer[writeMethod](entity_id, offset);//inVision player id;
 
         const event_id = Event(entity.event);
 
-        offset += deltaSnapshot.writeUint8(event_id, offset);//properys changed value
+        offset = buffer.writeUint8(event_id, offset);//properys changed value
 
     });
 
@@ -39,11 +41,13 @@ function writeInVision(deltaSnapshot, data, offset) {
 
 }
 
-function writeNick(deltaSnapshot, data, offset) {
+function writeNick(buffer, data, offset) {
 
-    const nick_length = deltaSnapshot.write(data, offset + 1, "utf8");
+    const nick_length = buffer.write(data, offset + 1, "utf8");
 
-    return offset + nick_length + deltaSnapshot.writeUint8(nick_length, offset);;
+    offset = buffer.writeUint8(nick_length, offset);
+
+    return offset + nick_length;
 
 }
 
@@ -51,15 +55,15 @@ module.exports = function encoder(targets, deltaBufferSizes, Dirty) {
 
     let deltaSnapshots = {};
 
-    for (const target in targets) {
+    for (const owner_socket_id in targets) {
 
-        const list = targets[target];
+        const list = targets[owner_socket_id];
 
-        const deltaSnapshot = Buffer.alloc(deltaBufferSizes[target]);
+        const deltaSnapshot = Buffer.alloc(deltaBufferSizes[owner_socket_id]);
 
         let offset = 0;
 
-        list.forEach((instance_id, index) => {
+        list.forEach(instance_id => {
 
             const player_patch = Dirty.get(instance_id);
 
@@ -71,7 +75,6 @@ module.exports = function encoder(targets, deltaBufferSizes, Dirty) {
             offset = offset + write_schema["instance_changed_num"].size;
 
             for (const state in player_patch) {
-                if (index > 0 && (state === "inVision" || state === "nick")) return;
 
                 const data = player_patch[state];
 
@@ -89,7 +92,7 @@ module.exports = function encoder(targets, deltaBufferSizes, Dirty) {
 
             writeToBuffer(deltaSnapshot, "instance_changed_num", changed_num, changed_offset);
 
-            deltaSnapshots[target] = deltaSnapshot;
+            deltaSnapshots[owner_socket_id] = deltaSnapshot;
 
         });
 

@@ -14,7 +14,7 @@ module.exports = function SafeExecute(label, fn) {
         fn();
     } catch (error) {
         systemStatus[label] = false;
-        console.log(`"${label}" down!`);
+        console.log(`"${label}" down!\n\n`);
         console.log(error);
     }
 

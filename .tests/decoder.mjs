@@ -39,9 +39,9 @@ export default function decoder(snapshot) {
 
                 offset++;
 
-                const property = read_schema[property_id].variable;//değişen verinin adı
+                const state = read_schema[property_id].state;//değişen verinin adı
 
-                switch (property) {
+                switch (state) {
                     case "inVision":
 
                         if (!Gamestate[entity_id].inVision) Gamestate[entity_id].inVision = new Set();//test için
@@ -67,7 +67,7 @@ export default function decoder(snapshot) {
                         }
 
                         break;
-                        
+
                     case "nick":
 
                         const nick_length = patch.getUint8(offset);
@@ -82,11 +82,10 @@ export default function decoder(snapshot) {
 
                     default:
 
-                        const property_bit = read_schema[property_id].bit;//değişen verinin boyutu
-                        const getMetod = "getUint" + property_bit;
                         const size = read_schema[property_id].byte;
+                        const getMetod = "getUint" + size * 8;
 
-                        Gamestate[entity_id][property] = patch[getMetod](offset, true);//değişen verinin değeri
+                        Gamestate[entity_id][state] = patch[getMetod](offset, true);//değişen verinin değeri
 
                         offset += size;
 

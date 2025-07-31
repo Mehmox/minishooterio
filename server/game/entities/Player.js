@@ -9,16 +9,17 @@ module.exports = class Player {
 
     clear() {
 
-        this.kill();
         this.KDA = { kill: 0, dead: 0, assist: 0 };
+        this.dead();
 
     }
 
-    kill() {
+    dead() {
 
         this.health = this.maxhealth;
-        this.enemyInfo.clear();
-        this.bulletInfo.clear();
+        this.seenEnemys.clear();
+        this.seenBy.clear();
+        this.seenBullets.clear();
         this.cooldown = 0;
         this.Muzzle_SERVER_X = undefined;
         this.Muzzle_SERVER_Y = undefined;
@@ -45,8 +46,9 @@ module.exports = class Player {
         this.x = -5000;
         this.y = -5000;
         this.health = this.maxhealth;
-        this.enemyInfo = new Set();
-        this.bulletInfo = new Set();
+        this.seenEnemys = new Set();
+        this.seenBy = new Set();
+        this.seenBullets = new Set();
         this.isShooting = false;
         this.cooldown = 0;
         this.Muzzle_SERVER_X = undefined;

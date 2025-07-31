@@ -1,4 +1,4 @@
-export default function Listeners(client, canvas, setTabs, user, system, ctx) {
+export default function Listeners(client, canvas, setTabs, system) {
 
     const movement = client.movement;
     const combat = client.combat;
@@ -112,8 +112,8 @@ export default function Listeners(client, canvas, setTabs, user, system, ctx) {
 
     //     const multiplier = 1 / (window.devicePixelRatio || 1);
     //     console.log(multiplier)
-    //     user.bulletsize = user.bulletsizeDefault * multiplier;
-    //     user.size = user.sizeDefault * multiplier;
+    //     client.bulletsize = client.bulletsizeDefault * multiplier;
+    //     client.size = client.sizeDefault * multiplier;
     //     system.lineWidth = 0.3 * multiplier;
     //     system.lineGap = 30 * multiplier;
 
@@ -127,8 +127,8 @@ export default function Listeners(client, canvas, setTabs, user, system, ctx) {
 
         console.log("Zoom değişti", currentRatio, "Çarpan:", multiplier);
 
-        user.bulletsize = user.bulletsizeDefault * multiplier;
-        user.size = user.sizeDefault * multiplier;
+        client.bulletsize = client.bulletsizeDefault * multiplier;
+        client.size = client.sizeDefault * multiplier;
         system.lineWidth = 0.3 * multiplier;
         system.lineGap = 30 * multiplier;
     }

@@ -37,13 +37,16 @@ module.exports = class EntityPool {
 
     }
 
-    acquirePlayer() {
+    acquirePlayer(nick, socket_id) {
         const player = this.pool.player.find(e => !e.isActive) || null
+        player.nick = nick;
+        player.socket_id = socket_id;
         player.isActive = true;
         return player;
     }
-    acquireBullet() {
+    acquireBullet(owner, x, y, targetX, targetY) {
         const bullet = this.pool.bullet.find(e => !e.isActive) || null;
+        bullet.setOwner(owner, x, y, targetX, targetY);
         bullet.isActive = true;
         return bullet;
     }

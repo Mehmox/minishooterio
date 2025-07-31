@@ -5,8 +5,8 @@ const { leech, leechAsync } = require("../../../.tools/leech");
 const safeExecute = require("../utils/safeExecute");
 const moveBullets = require("../mechanics/moveBullets");
 const movePlayers = require("../mechanics/movePlayers");
-const damage = require("../utils/damage");
 const fire = require("../mechanics/fire");
+const damage = require("../utils/damage");
 
 const ENV = process.env.ENV;
 let GameTick = 0;
@@ -31,7 +31,7 @@ module.exports = function tickloop(GameState, Pool, ms, snapshotms, SnapshotMana
             GameTick++;
             // console.log(`Looping! Tick: ${GameTick}`)
             //bullet position update
-            safeExecute("moveBullets", () => moveBullets(bullets, now, players));
+            safeExecute("moveBullets", () => moveBullets(bullets, now));
             //player position update
             safeExecute("movePlayers", () => movePlayers(players));
             //generate bullet update

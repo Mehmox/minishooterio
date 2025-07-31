@@ -6,8 +6,8 @@ class SnapshotManager {
     update(next, snapshot) {
 
         const Delta = decoder(snapshot);
-
-        applyDelta(Delta, next)
+        console.log(next);
+        applyDelta(next, Delta);
 
     }
 

@@ -14,10 +14,6 @@ module.exports = class Bullet {
 
     }
 
-    clear() {
-
-    }
-
     normalize(targetX, targetY) {
 
         let directionX = targetX - this.x;

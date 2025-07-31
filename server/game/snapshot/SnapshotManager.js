@@ -1,5 +1,5 @@
 //SnapshotManager.js
-const updateAOI = require("../utils/updateAOI");
+const updateAOI = require("./updateAOI");
 const positioner = require("./positioner");
 const byteCalculater = require("./byteCalculater");
 const encoder = require("./encoder");
@@ -32,7 +32,7 @@ module.exports = class SnapshotManager {
 
         const GameBuffer = encoder(targets, deltaBufferSizes, Dirty);
 
-        decoder(GameBuffer)//test
+        // decoder(GameBuffer)//test
 
         sender(GameBuffer, this.io.sockets.sockets);
 

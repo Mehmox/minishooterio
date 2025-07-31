@@ -6,8 +6,8 @@ import { Inputs, Ping } from "./Timers.js";
 import snapshotManager from "../snapshot/snapshotManager.js";
 
 import Start from '../utils/Check.js';
-import User from '../utils/User.js';
-import EntitiesManager from "../managers/EntityManager.js";
+import user from '../utils/User.js';
+import EntitiesManager from "../utils/EntityManager.js";
 
 const system = {
     SnapshotDelta: 0,
@@ -16,7 +16,6 @@ const system = {
     lineWidth: 0.3,
     lineGap: 30,
 }
-const user = new User();
 let EntityPool;
 
 export default function client(
@@ -79,7 +78,7 @@ export default function client(
 
     });
 
-    const clearListener = Listeners(user, canvas, setTabs, user, system, ctxg);
+    const clearListener = Listeners(user, canvas, setTabs, system);
 
     return () => {
         socket.off("tick", Tick);
