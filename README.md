@@ -32,7 +32,7 @@ Mini Shooter, tarayıcı üzerinde oynanabilen çok oyunculu (multiplayer) bir 2
 
 Bu oyun, öğrenme amaçlı olarak Node.js tabanlı bir fullstack mimariyle geliştirilmiştir. Hem istemci (React.js) hem de sunucu (Express + Socket.IO) tarafı Node.js ile yazılmıştır.
 
-Şu an oyun MVP aşamasındadır. İki ayrı sürümü mevcuttur:
+Şu an oyun Prototip aşamasındadır. İki ayrı sürümü mevcuttur:
 
 - `main`: Snapshot tabanlı, şu anda çalışan ama birkaç hatası olan sürüm.
 - `rework`: Delta snapshot mimarisi üzerinde çalışılan, geliştirme aşamasındaki sürüm.
@@ -50,7 +50,7 @@ Bu oyun, öğrenme amaçlı olarak Node.js tabanlı bir fullstack mimariyle geli
 - ⚔️ **Oyuncular arası çatışma sistemi**: mermi çarpışmaları, ölüm ve yeniden doğma
 - 🎮 **React tabanlı kullanıcı arayüzü** (frontend)
 - 🌐 **Express.js + Socket.IO tabanlı** backend altyapısı
-- 🧪 **MVP** seviyesinde tamamlanmış ilk sürüm
+- 🧪 **Prototip** seviyesinde tamamlanmış ilk sürüm
 
 ### 🚧 Delta Snapshot Sürümü (şu anda rework branch’i altında geliştirilmektedir)
 - 🧊 **Entity pooling sistemi** (her entity baştan oluşturulmaz, yeniden kullanılır)
@@ -70,8 +70,8 @@ Bu proje, frontend (React) ve backend (Express + Socket.IO) bileşenlerinden olu
 ### 1. Depoyu klonlayın
 
 ```
-git clone https://github.com/Mehmox/minishooter.git
-cd minishooter
+git clone https://github.com/Mehmox/minishooterio.git
+cd minishooterio
 ```
 
 #### 2. Bağımlılıkları yükleyin
@@ -101,10 +101,10 @@ Uygulama varsayılan olarak http://localhost:3000 adresinde açılır.
 
 ## Lisans
 
-Bu proje [Proprietary Lisansı](LICENSE) kapsamında lisanslanmıştır.
+Bu proje [MIT](LICENSE) kapsamında lisanslanmıştır.
 
 ## İletişim (Contact)
 
 Herhangi bir sorun bildirimi, öneri veya katkı için benimle Discord üzerinden iletişime geçebilirsin:
 
-- Discord: `mehmox`
+- Discord: `mehmox#8166`
