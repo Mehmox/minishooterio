@@ -13,6 +13,8 @@ export default function unRegister(TimeoutInSec, prioritys, servers) {
 
                 prioritys.set(data.priority, priorityData.filter(id => id !== ServerId));
 
+                Log(`${delta} >= ${TimeoutInSec * 1000}`, "LoadBalancer");
+
                 Log(`Server ${ServerId} unregistered to priority: ${data.priority}.`, "LoadBalancer");
                 
             }

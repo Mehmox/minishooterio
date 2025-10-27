@@ -17,9 +17,9 @@ app.use(express.static(join(__dirname, "./build")));
 
 Log("build served\n");
 
-app.get("/", (req, res) => {
-    Log("GET /");
-    res.sendFile(join(__dirname, "./build", "index.html"));
+app.use((req, res) => {
+  Log("build served\n");
+  res.sendFile(join(__dirname, "./build", "index.html"));
 });
 
 app.listen(PORT, () => Log(`Listening web server on port: ${PORT}`));

@@ -10,6 +10,7 @@ export default function drawMap(prev, next, t) {
 
     const mapCtx = react.refs.mapCtx;
     const map = react.refs.mapRef.current;
+    const pov = session.pov;
     const fgColor = react.fgColor;
 
     const playerVisualSize = session.playerCollisionSize * session.scale;
@@ -24,25 +25,25 @@ export default function drawMap(prev, next, t) {
 
     mapCtx.clearRect(0, 0, map.width, map.height);
 
-    mapCtx.lineWidth = 5;
+    mapCtx.lineWidth = 60 * session.scale;
     mapCtx.fillStyle = "blue";
 
     //draw self
-    drawPlayer(mapCtx, x, y, playerVisualSize, angle, self, fgColor, selfColor, selfHeatlhColor, true);
+    drawPlayer(StateManager, mapCtx, x, y, playerVisualSize, angle, self, fgColor, selfColor, selfHeatlhColor, true);
 
     mapCtx.strokeStyle = fgColor;
 
     const povLineStart = {
-        x: x - session.width / 2,
-        y: y - session.height / 2
+        x: x - pov.width / 2,
+        y: y - pov.height / 2
     }
     //draw pov
     mapCtx.beginPath();
 
     mapCtx.moveTo(povLineStart.x, povLineStart.y);
-    mapCtx.lineTo(povLineStart.x + session.width, povLineStart.y);
-    mapCtx.lineTo(povLineStart.x + session.width, povLineStart.y + session.height);
-    mapCtx.lineTo(povLineStart.x, povLineStart.y + session.height);
+    mapCtx.lineTo(povLineStart.x + pov.width, povLineStart.y);
+    mapCtx.lineTo(povLineStart.x + pov.width, povLineStart.y + pov.height);
+    mapCtx.lineTo(povLineStart.x, povLineStart.y + pov.height);
 
     mapCtx.closePath();
     mapCtx.stroke();

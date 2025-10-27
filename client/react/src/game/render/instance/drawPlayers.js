@@ -38,6 +38,6 @@ export default function drawPlayers(canvasStart, prev, next, t) {
 
     const angle = aLerp(self.angle, selfEnd.angle, t);
 
-    drawPlayer(StateManager,    gameCtx, window.innerWidth / 2, window.innerHeight / 2, playerVisualSize, angle, self, fgColor, selfColor, selfHeatlhColor);
+    drawPlayer(StateManager, gameCtx, window.innerWidth / 2, window.innerHeight / 2, playerVisualSize, angle, self, fgColor, selfColor, selfHeatlhColor);
 
 }

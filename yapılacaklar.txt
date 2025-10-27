@@ -1,13 +1,11 @@
 yapılacaklar:
 
     react:
-        minimapi çalışmıyor.
-        
         github link butonu.
 
-        zoom yapıldığında entitylerin uzaklığını ayarlama.
-
         settings menüsü butonu.
+
+        zoom yapıldığında entitylerin uzaklığını ayarlama.
 
         sunucu seçme ekranı.
 
@@ -30,3 +28,7 @@ yapılanlar:
 zoom yapıldığında kameranın yüksekten bakıyormuş gibi görünmesi.
 
 mermilerin oyuncu olarak görünmesi.
+
+/game den refreshe basınca express path error
+
+minimapi çalışmıyor.

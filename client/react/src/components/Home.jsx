@@ -96,7 +96,7 @@ export default function Home({ h1, setSocket, Menu, setMenu, gameOptions, SetGam
 
                 <h1 className="text-8xl mb-32 text-white">{h1}</h1>
 
-                <input ref={usernameRef} name="username" h1="text" maxLength="9" placeholder="username" required
+                <input ref={usernameRef} name="username" h1="text" maxLength="9" placeholder="username" required autoFocus
                     className="w-input h-16 pb-3 pl-5 text-5xl rounded-[9px]" />
 
                 <button ref={btn} h1="submit" className="bg-blue-500 w-[300px] h-12 mt-10 text-[30px] text-white rounded-[9px] flex justify-center items-center">Play!

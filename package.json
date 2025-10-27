@@ -10,7 +10,7 @@
     "url": "https://github.com/Mehmox/minishooterio.git"
   },
   "scripts": {
-    "r": "rimraf bot/node_modules client/node_modules gameServer/node_modules loadBalancer/node_modules node_modules",
+    "r": "rimraf bot/node_modules client/node_modules client/react/node_modules gameServer/node_modules loadBalancer/node_modules node_modules",
     "i": "npm i && npm run i --prefix bot && npm run ii --prefix client && npm run ii --prefix gameServer",
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix gameServer\"",
     "build": "npm run build --prefix client && npm run build --prefix gameServer"

@@ -37,7 +37,7 @@ class EntityManager {
         Log(`\t${playerNum} player entities!`, "Server");
 
         const bulletNum = this.pool.filter(instance => instance.type === "Bullet").length;
-        Log(`\t${bulletNum} player entities!`, "Server");
+        Log(`\t${bulletNum} bullet entities!`, "Server");
 
     }
 

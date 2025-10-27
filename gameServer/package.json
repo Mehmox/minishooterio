@@ -6,10 +6,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "i": "npm i",
+    "i": "npm i --production",
     "dev": "cross-env NODE_ENV=development nodemon --watch src --ext js,ts --ignore dist --exec \"npx tsc || node index.js 3001\"",
     "build": "npx tsc",
-    "ii": "npm i --production",
+    "ii": "npm i",
     "start": "cross-env NODE_ENV=production sudo node index.js"
   },
   "dependencies": {

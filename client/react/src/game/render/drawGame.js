@@ -33,6 +33,6 @@ export default function drawGame(t) {
 
     drawPlayers(canvasStart, prev, next, t);
 
-    // PrintMap(prev, next, t);
+    PrintMap(prev, next, t);
 
 }
