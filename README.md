@@ -1,67 +1,83 @@
 # Mini Shooter (2D)
 
-Tarayıcıda çalışan, çok oyunculu (multiplayer) bir 2D kuş bakışı (top-down) nişancı oyunu. Bu proje bir oyun olarak değil, bir **öğrenme süreci** olarak başladı. 
-
-Başlangıçta Socket.IO kullanmayı öğrenmek istiyordum. ChatGPT'ye "ne yapabilirim?" diye sordum; o da basit bir karakter hareketi ve ateş etme sistemi olan küçük bir oyun önerdi. Projeye sadece Node.js ve React bilgisiyle başladım — oyun geliştirme hakkında neredeyse hiçbir şey bilmiyordum. Zamanla projeyi geliştirirken şunları öğrendim:
-
-- Snapshot (oyun durumunu istemcilere aktarma) nedir, nasıl çalışır?
-- Interpolation (arayüzde yumuşatma) neden ve nasıl uygulanır?
-- Delta snapshot ile veri trafiği nasıl azaltılır?
-- Oyun verileri neden ve nasıl `binary` (ikilik) formata çevrilir?
-- HTML5 `canvas` nasıl çalışır?
-- Oyun döngüsü (game loop) nasıl kurulur, neden `setInterval` yerine `setImmediate` kullanılır?
-- Server-client ayrımı oyunlarda nasıl yapılır?
-- Proje dosyaları nasıl soyutlanır (abstraction)?
-- Lisanslar ne işe yarar, nasıl eklenir?
-
-Bu süreçte aynı zamanda sunucumu evde çalıştırmak istedim. Bu sayede:
-
-- Eski laptoplarıma Ubuntu Server kurmayı,
-- SSH ile bağlanmayı,
-- `ufw` (Uncomplicated Firewall) ile port açmayı,
-- Modemden port yönlendirmeyi (port forwarding),
-- Ve temel düzeyde Linux sistem kullanımını da öğrendim.
-
-Kısacası bu proje, 3D oyunlar yapmadan önce altyapıyı 2D düzlemde anlayıp oturtmamı sağladı. Hedefim "oyun yapmak" değil, **oyunun nasıl yapıldığını öğrenmekti**. Bu `README`, projenin bir parçası değil, o yolculuğun bir özetidir.
-
 ## 🎮 Tanıtım
 
 Bu proje, diep.io benzeri bir çok oyunculu 2D arena shooter oyunudur. Tasarım ve mekanik olarak diep.io'dan ilham alınmıştır.
 
-Mini Shooter, tarayıcı üzerinde oynanabilen çok oyunculu (multiplayer) bir 2D top-down (kuş bakışı) nişancı oyunudur. Oyuncular basit silahlarla birbirlerine karşı savaşır. Her oyuncu, gerçek zamanlı olarak diğer oyuncuların konumunu, hareketini ve atışlarını görebilir.
+Mini Shooter, tarayıcı üzerinde oynanabilen multiplayer bir 2D top-down nişancı oyunudur. Oyuncular basit silahlarla birbirlerine karşı savaşır. Her oyuncu, gerçek zamanlı olarak diğer oyuncuların konumunu, hareketini ve atışlarını görebilir.
 
-Bu oyun, öğrenme amaçlı olarak Node.js tabanlı bir fullstack mimariyle geliştirilmiştir. Hem istemci (React.js) hem de sunucu (Express + Socket.IO) tarafı Node.js ile yazılmıştır.
-
-Şu an oyun Prototip aşamasındadır. İki ayrı sürümü mevcuttur:
-
-- `main`: Snapshot tabanlı, şu anda çalışan ama birkaç hatası olan sürüm.
-- `rework`: Delta snapshot mimarisi üzerinde çalışılan, geliştirme aşamasındaki sürüm.
-
-⚠️ Uyarı: Sunucu şu an dinamik IP üzerinden barındırıldığı için zaman zaman geçici erişim problemleri yaşanabilir. IP değişiklikleri tespit edildikçe, Cloudflare üzerinden manuel olarak güncellenmektedir. Eğer oyun sayfası erişilemiyorsa, lütfen daha sonra tekrar deneyin.
+Bu oyun, öğrenme amaçlı olarak Node.js tabanlı bir fullstack mimariyle geliştirilmiştir. Hem istemci hem sunucu tarafı Node.js ile yazılmıştır.
 
 🔗 Canlı Demo: [https://mehmox.com](https://mehmox.com)
 
 ## Özellikler
-
-### 🔄 Snapshot Sürümü (Çalışan Ana Sürüm)
-- 🔫 **Gerçek zamanlı çok oyunculu** (multiplayer) 2D shooter sistemi
+- 🔫 **Gerçek zamanlı çok oyunculu** 2D shooter sistemi
 - 💻 **WebSocket protokolü** ile hızlı ve düşük gecikmeli veri aktarımı
-- 📦 **Buffer tabanlı veri iletimi** ile optimize ağ performansı
 - ⚔️ **Oyuncular arası çatışma sistemi**: mermi çarpışmaları, ölüm ve yeniden doğma
-- 🎮 **React tabanlı kullanıcı arayüzü** (frontend)
-- 🌐 **Express.js + Socket.IO tabanlı** backend altyapısı
-- 🧪 **Prototip** seviyesinde tamamlanmış ilk sürüm
-
-### 🚧 Delta Snapshot Sürümü (şu anda rework branch’i altında geliştirilmektedir)
-- 🧊 **Entity pooling sistemi** (her entity baştan oluşturulmaz, yeniden kullanılır)
+- 📦 **Buffer tabanlı veri iletimi** ile optimize ağ performansı
 - ⚙️ **Delta snapshot altyapısı**: yalnızca değişen veriler gönderilir
-- 🧭 **Her oyuncuya özel snapshot üretimi** (server taraflı özelleştirme)
+- 🎮 **React tabanlı kullanıcı arayüzü** (frontend)
+- 🧊 **Entity pooling sistemi** (her entity baştan oluşturulmaz, yeniden kullanılır)
 
-📁 Proje klasör yapısı için: [docs/structure.txt](./docs/structure.txt)
+## Teknolojiler
+- "⚔️ **Client**: React, Html Canvas, socket.io-client, tailwind, vite, express"
+- "💻 **Load Balancer**: dotenv, express, jsonwebtoken"
+- "🔫 **Server**: dotenv, jsonwebtoken, socket.io, typescript"
+
+## Sistem Mimarisi
+
+⚔️ **Client**
+
+- React tabanlı SPA (Single Page Application).
+
+- StateManager global oyun durumunu (snapshot, session, input) tutar.
+
+- Interpolation sistemi: snapshot.prev–snapshot.next → game.prev–game.next.
+
+- Harita 4000×4000 px, oyuncu ekranı 1920×925 px sabit.
+
+- Görsel tema: light/dark mode.
+
+- Arayüz göstergeleri: ping, snapshot boyutu, aktif oyuncu sayısı.
+
+💻 **Game Server**
+
+- Açılışta sabit sayıda player ve bullet instance oluşturur (entity pooling).
+
+- Tick başına game state hesaplar ve snapshot üretir.
+
+- 64 Hz snapshot gönderir.
+
+- Disconnect olaylarında entity release eder.
+
+- AOI (Area of Interest): sadece oyuncunun görüş alanındaki entity’leri gönderir.
+
+💻 **Load Balancer**
+
+- Sunucuların oyuncu sayılarını ve önceliklerini takip eder.
+
+- 30 saniye boyunca heartbeat gelmeyen sunucuyu listeden siler.
+
+- Yeni oyunculara “en dolu ama tam dolmamış” sunucuyu seçer.
+
+- Her oyun sunucusuyla shared secret_key üzerinden JWT doğrulaması yapar.
+
+🧠 **Bot (Test Clients)**
+
+- Bu klasör sadece yük testi (stress test) ve davranış denemeleri için kullanılır.
+
+- Development modda otomatik başlatılmaz.
+
+- Bot’lar oyuna bağlanıp harita etrafında saat yönünde döner, gerçek oyuncular gibi davranmaz.
 
 ## Kurulum (Installation)
 
-Bu proje, frontend (React) ve backend (Express + Socket.IO) bileşenlerinden oluşmaktadır. Aşağıdaki adımları takip ederek geliştirme ortamını kurabilir ve projeyi çalıştırabilirsiniz.
+Geliştirme ortamını başlatmak için aşağıdaki adımları takip edebilirsiniz.
+
+> ⚠️ **Önemli:**  
+> Uygulama yalnızca **3000** (frontend) ve **3001** (backend) portları kullanılabiliyorsa çalışır.  
+> Bu portlar başka bir uygulama tarafından kullanılıyorsa proje başlatılamaz.  
+> Geliştirme ortamında yalnızca web server ve game server başlatılır. Load balancer kullanılmaz ve JWT doğrulama kapalıdır.
 
 ### Gereksinimler
 - Node.js (LTS sürümü önerilir)  
@@ -74,34 +90,20 @@ git clone https://github.com/Mehmox/minishooterio.git
 cd minishooterio
 ```
 
-#### 2. Bağımlılıkları yükleyin
+### 2. Bağımlılıkları yükleyin
 ```
-npm run ii 
+npm run i
 ```
-Bu komut, root, client ve server dizinlerindeki tüm bağımlılıkları yükler.
+Bu komut root, bot, client ve server dizinlerindeki tüm bağımlılıkları yükler.
 
 #### 3. Geliştirme sunucusunu başlatın
 ```
 npm run dev
 ```
-Frontend React uygulaması varsayılan olarak http://localhost:3000 adresinde açılır.
-
-Backend Express + Socket.IO sunucusu ise http://localhost:3001 portunda çalışır.
-
-#### 4. Üretim (production) için derleme ve başlatma
-```
-npm run build
-npm start
-```
-Bu komutlar frontend uygulamasını derler ve backend ile birlikte üretim modunda çalıştırır.
-
-Derlenen frontend dosyaları build/ klasörüne kopyalanır ve backend bu dosyaları sunar.
-
-Uygulama varsayılan olarak http://localhost:3000 adresinde açılır.
 
 ## Lisans
 
-Bu proje [MIT](LICENSE) kapsamında lisanslanmıştır.
+Bu proje [Ticari Olmayan Kullanım Lisansı (TOUL)](LICENSE) kapsamında lisanslanmıştır.
 
 ## İletişim (Contact)
 

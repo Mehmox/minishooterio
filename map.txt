@@ -1,0 +1,14 @@
+express
+react
+tailwindcss  
+
+socketio
+jwt
+cloudflare
+nginx
+rate limit   
+load balance 
+subdomain    
+vps
+ufw
+nat

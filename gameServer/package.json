@@ -1,0 +1,24 @@
+{
+  "name": "game_server",
+  "description": "minishooterio game server codes.",
+  "author": "Mehmox",
+  "license": "Non-Commercial Use License (NCUL) – Version 1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "i": "npm i",
+    "dev": "cross-env NODE_ENV=development nodemon --watch src --ext js,ts --ignore dist --exec \"npx tsc || node index.js 3001\"",
+    "build": "npx tsc",
+    "ii": "npm i --production",
+    "start": "cross-env NODE_ENV=production sudo node index.js"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

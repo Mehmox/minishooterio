@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    user-select: none;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: grey;
+    font-family: "Play", sans-serif;
+}
+
+canvas {
+    background-color: white;
+}
+
+
+input,
+button {
+    text-shadow:
+        -2px -2px 0 black,
+        2px -2px 0 black,
+        -2px 2px 0 black,
+        2px 2px 0 black;
+}
+
+h1 {
+    text-shadow:
+        -4px -4px 0 black,
+        4px -4px 0 black,
+        -4px 4px 0 black,
+        4px 4px 0 black;
+}
+
+input,
+button {
+    border-color: black;
+    border-width: 2px;
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

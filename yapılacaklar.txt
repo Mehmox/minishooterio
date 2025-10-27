@@ -1,0 +1,32 @@
+yapılacaklar:
+
+    react:
+        minimapi çalışmıyor.
+        
+        github link butonu.
+
+        zoom yapıldığında entitylerin uzaklığını ayarlama.
+
+        settings menüsü butonu.
+
+        sunucu seçme ekranı.
+
+
+
+    server:
+
+        disconnect bugunu çöz.
+
+        loadbalancer race bugunu çöz.
+
+        rate limit.
+
+        ip limit.
+
+
+
+yapılanlar:
+
+zoom yapıldığında kameranın yüksekten bakıyormuş gibi görünmesi.
+
+mermilerin oyuncu olarak görünmesi.

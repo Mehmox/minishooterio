@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",          // TS derlemesinde çıkacak JS versiyonu
+    "module": "esnext",          // ES module (import/export) kullanımı
+    "outDir": "./dist",          // Derlenen dosyaların gideceği klasör
+    "rootDir": "./src",          // Kaynak dosyalar
+    "skipLibCheck": true,        // Tip kontrolü yapmayı atla
+    "allowJs": true,             // JS dosyalarını da derlemeye dahil et
+    "checkJs": false,            // JS dosyalarında TS tipi kontrolü yapma
+    "esModuleInterop": true,     // import/export uyumu
+    "noEmitOnError": false       // Hata olsa da dosyaları emit et
+  },
+  "include": ["src/**/*"],       // Sadece src altındaki dosyalar
+  "exclude": ["node_modules"]    // node_modules hariç
+}
